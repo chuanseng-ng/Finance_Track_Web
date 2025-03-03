@@ -99,7 +99,7 @@ def add_recurring():
         - datetime.strptime(data["start_date"], "%Y-%m").month
         + 1
     )
-    monthly_price = price_sgd / months_count
+    monthly_price = int(price_sgd) / int(months_count)
     cursor.execute(
         """INSERT INTO recurring_expenses (start_date, end_date, category, item, location, price, currency, price_sgd)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
