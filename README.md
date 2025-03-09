@@ -12,9 +12,8 @@
 ## Features
 
 - Implemented
-  - NIL
-- To-Do
   - Tracks daily expenses
+- To-Do
   - Tracks monthly recurring expenses
   - Utilizes salary to calculate remaining spending power
   - Plot monthly/yearly expense graph
