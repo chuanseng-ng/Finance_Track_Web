@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 
+import requests
 import sqlite3
 import yaml
 
@@ -10,7 +11,7 @@ app = Flask(__name__)
 # Function to map yaml file's user-config to parameters
 def cfg_setup():
     # Load config file
-    with open("user_config.yaml", "r") as f:
+    with open("cfg/user_config.yaml", "r") as f:
         config = yaml.safe_load(f)
 
     # Accessing config settings
@@ -27,7 +28,7 @@ def cfg_setup():
         return api_key
 
 
-api_key = cfg_setup
+api_key = cfg_setup()
 
 API_URL = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/"
 
@@ -58,12 +59,13 @@ def convert_to_sgd(cost, currency):
     if currency == "SGD":
         return cost
 
-    response = request.get(API_URL + currency)
+    curr_url = API_URL + currency
+    response = requests.get(curr_url)
     if response.status_code == 200:
-        rates = response.json().get("rates", {})
+        rates = response.json().get("conversion_rates", {})
         sgd_rate = rates.get("SGD")
         if sgd_rate:
-            return cost * sgd_rate
+            return float(cost) * sgd_rate
 
     return None
 
