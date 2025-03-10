@@ -1,9 +1,35 @@
 from flask import Flask, render_template, request, jsonify
-import sqlite3
 from datetime import datetime
 
+import sqlite3
+import yaml
 
 app = Flask(__name__)
+
+
+# Function to map yaml file's user-config to parameters
+def cfg_setup():
+    # Load config file
+    with open("user_config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
+    # Accessing config settings
+    api_key = config["api_key"]
+
+    # Make sure API key exists before continuing script
+    if not (api_key):
+        print(
+            "Create personal API key at exchangerate-api.com and input to user_config.yaml"
+        )
+        print("Do not upload personal API key!")
+        raise ValueError("API Key is empty in user_config.yaml!")
+    else:
+        return api_key
+
+
+api_key = cfg_setup
+
+API_URL = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/"
 
 
 # Function to get SQL database and create table if no exists
@@ -18,10 +44,28 @@ def get_db(year):
                         category TEXT,
                         item TEXT,
                         location TEXT,
-                        price REAL)"""
+                        price REAL,
+                        currency TEXT,
+                        price_sgd REAL)"""
     )
     conn.commit()
     return conn
+
+
+# Function to convert other currencies to SGD
+## Use exchangerate-api.com for exchange rate data
+def convert_to_sgd(cost, currency):
+    if currency == "SGD":
+        return cost
+
+    response = request.get(API_URL + currency)
+    if response.status_code == 200:
+        rates = response.json().get("rates", {})
+        sgd_rate = rates.get("SGD")
+        if sgd_rate:
+            return cost * sgd_rate
+
+    return None
 
 
 # Function to hook up to SQL database and perform web-based interaction
@@ -31,15 +75,18 @@ def add_expense():
     year = datetime.strptime(data["date"], "%Y-%m-%d").year
     conn = get_db(year)
     cursor = conn.cursor()
+    price_sgd = convert_to_sgd(data["price"], data["currency"])
     cursor.execute(
-        """INSERT INTO expenses (date, category, item, location, price)
-                      VALUES (?, ?, ?, ?, ?)""",
+        """INSERT INTO expenses (date, category, item, location, price, currency, price_sgd)
+                      VALUES (?, ?, ?, ?, ?, ?, ?)""",
         (
             data["date"],
             data["category"],
             data["item"],
             data["location"],
             data["price"],
+            data["currency"],
+            price_sgd,
         ),
     )
     conn.commit()
@@ -47,6 +94,7 @@ def add_expense():
     return jsonify({"message": "Expense added successfully"})
 
 
+# Main function
 @app.route("/")
 def index():
     current_year = datetime.now().year
@@ -54,7 +102,7 @@ def index():
     conn = get_db(current_year)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT SUM(price) FROM expenses WHERE strftime('%m', date) = ?",
+        "SELECT SUM(price_sgd) FROM expenses WHERE strftime('%m', date) = ?",
         (current_month,),
     )
     monthly_spending = cursor.fetchone()[0] or 0
