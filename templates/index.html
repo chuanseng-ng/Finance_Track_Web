@@ -16,6 +16,7 @@
         Item: <input type="text" id="item" required><br>
         Location: <input type="text" id="location" required><br>
         Price: <input type="number" id="price" required><br>
+        Currency: <input type="text" id="currency" required><br>
         <button type="submit">Add Expense</button>
     </form>
 
@@ -31,6 +32,7 @@
                     item: document.getElementById('item').value,
                     location: document.getElementById('location').value,
                     price: document.getElementById('price').value,
+                    currency: document.getElementById('currency').value
                 })
             }).then(response => response.json())
               .then(data => alert(data.message));
