@@ -1,3 +1,4 @@
+import requests
 import yaml
 
 
@@ -19,3 +20,20 @@ def cfg_setup():
         raise ValueError("API Key is empty in user_config.yaml!")
     else:
         return api_key
+
+
+# Function to convert other currencies to SGD
+## Use exchangerate-api.com for exchange rate data
+def convert_to_sgd(API_URL, cost, currency):
+    if currency == "SGD":
+        return cost
+
+    curr_url = API_URL + currency
+    response = requests.get(curr_url)
+    if response.status_code == 200:
+        rates = response.json().get("conversion_rates", {})
+        sgd_rate = rates.get("SGD")
+        if sgd_rate:
+            return float(cost) * sgd_rate
+
+    return None

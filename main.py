@@ -3,7 +3,6 @@ from datetime import datetime
 
 import setup.setup_stg as setup_stg
 
-import requests
 import sqlite3
 
 app = Flask(__name__)
@@ -34,23 +33,6 @@ def get_db(year):
     return conn
 
 
-# Function to convert other currencies to SGD
-## Use exchangerate-api.com for exchange rate data
-def convert_to_sgd(cost, currency):
-    if currency == "SGD":
-        return cost
-
-    curr_url = API_URL + currency
-    response = requests.get(curr_url)
-    if response.status_code == 200:
-        rates = response.json().get("conversion_rates", {})
-        sgd_rate = rates.get("SGD")
-        if sgd_rate:
-            return float(cost) * sgd_rate
-
-    return None
-
-
 # Function to hook up to SQL database and perform web-based interaction
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
@@ -58,7 +40,7 @@ def add_expense():
     year = datetime.strptime(data["date"], "%Y-%m-%d").year
     conn = get_db(year)
     cursor = conn.cursor()
-    price_sgd = convert_to_sgd(data["price"], data["currency"])
+    price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
     cursor.execute(
         """INSERT INTO expenses (date, category, item, location, price, currency, price_sgd)
                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
