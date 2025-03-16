@@ -29,11 +29,24 @@ def get_db(year):
                         currency TEXT,
                         price_sgd REAL)"""
     )
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS recurring_expenses (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        start_date TEXT,
+                        end_date TEXT,
+                        category TEXT,
+                        item TEXT,
+                        location TEXT,
+                        price REAL,
+                        currency TEXT,
+                        price_sgd REAL)"""
+    )
     conn.commit()
     return conn
 
 
 # Function to hook up to SQL database and perform web-based interaction
+## Add daily expenses (1-time)
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
     data = request.json
@@ -59,6 +72,40 @@ def add_expense():
     return jsonify({"message": "Expense added successfully"})
 
 
+## Add recurring expenses
+@app.route("/add_recurring", methods=["POST"])
+def add_recurring():
+    data = request.json
+    start_year = datetime.strptime(data["start_date"], "%Y-%m").year
+    end_year = datetime.strptime(data["end_date"], "%Y-%m").year
+    conn = get_db(start_year)
+    cursor = conn.cursor()
+    price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
+    months_count = (end_year - start_year) * 12 + (
+        datetime.strptime(data["end_date"], "%Y-%m").month
+        - datetime.strptime(data["start_date"], "%Y-%m").month
+        + 1
+    )
+    monthly_price = int(price_sgd) / int(months_count)
+    cursor.execute(
+        """INSERT INTO recurring_expenses (start_date, end_date, category, item, location, price, currency, price_sgd)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        (
+            data["start_date"],
+            data["end_date"],
+            data["category"],
+            data["item"],
+            data["location"],
+            data["price"],
+            data["currency"],
+            monthly_price,
+        ),
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Recurring expense added successfully"})
+
+
 # Main function
 @app.route("/")
 def index():
@@ -71,6 +118,7 @@ def index():
         (current_month,),
     )
     monthly_spending = cursor.fetchone()[0] or 0
+    # TODO: Add support to include monthly expenses in current month's spending
     conn.close()
     return render_template(
         "index.html", monthly_spending=monthly_spending, datetime=datetime

@@ -20,6 +20,18 @@
         <button type="submit">Add Expense</button>
     </form>
 
+    <h3>Add a Recurring Expense</h3>
+    <form id="recurring-form">
+        Start Date (YYYY-MM): <input type="month" id="start_date" required><br>
+        End Date (YYYY-MM): <input type="month" id="end_date" required><br>
+        Category: <input type="text" id="recurring_category" required><br>
+        Item: <input type="text" id="recurring_item" required><br>
+        Location: <input type="text" id="recurring_location" required><br>
+        Total Price: <input type="number" id="recurring_price" required><br>
+        Currency: <input type="text" id="recurring_currency" value="SGD" required><br>
+        <button type="submit">Add Recurring Expense</button>
+    </form>
+
     <script>
         document.getElementById('expense-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -38,6 +50,23 @@
               .then(data => alert(data.message));
         });
 
+        document.getElementById('recurring-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('/add_recurring', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    start_date: document.getElementById('start_date').value,
+                    end_date: document.getElementById('end_date').value,
+                    category: document.getElementById('recurring_category').value,
+                    item: document.getElementById('recurring_item').value,
+                    location: document.getElementById('recurring_location').value,
+                    price: document.getElementById('recurring_price').value,
+                    currency: document.getElementById('recurring_currency').value
+                })
+            }).then(response => response.json())
+              .then(data => alert(data.message));
+        });
     </script>
 </body>
 </html>
