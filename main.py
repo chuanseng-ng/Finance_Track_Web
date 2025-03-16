@@ -37,7 +37,7 @@ def get_db(year):
                         category TEXT,
                         item TEXT,
                         location TEXT,
-                        price REAL,
+                        ori_price REAL,
                         currency TEXT,
                         price_sgd REAL)"""
     )
@@ -88,7 +88,7 @@ def add_recurring():
     )
     monthly_price = int(price_sgd) / int(months_count)
     cursor.execute(
-        """INSERT INTO recurring_expenses (start_date, end_date, category, item, location, price, currency, price_sgd)
+        """INSERT INTO recurring_expenses (start_date, end_date, category, item, location, ori_price, currency, price_sgd)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             data["start_date"],
@@ -113,15 +113,22 @@ def index():
     current_month = datetime.now().strftime("%m")
     conn = get_db(current_year)
     cursor = conn.cursor()
+    ## Get sum of expenses in the current month
     cursor.execute(
         "SELECT SUM(price_sgd) FROM expenses WHERE strftime('%m', date) = ?",
         (current_month,),
     )
-    monthly_spending = cursor.fetchone()[0] or 0
-    # TODO: Add support to include monthly expenses in current month's spending
+    month_spend = cursor.fetchone()[0] or 0
+    ## Get sum of recurring expenses valid in current month
+    cursor.execute(
+        "SELECT SUM(price_sgd) FROM recurring_expenses WHERE (CAST(strftime('%m', start_date) AS INTEGER) <= ? AND CAST(strftime('%Y', start_date) AS INTEGER) <= ?) AND (CAST(strftime('%m', end_date) AS INTEGER) >= ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?)",
+        (int(current_month), int(current_year), int(current_month), int(current_year)),
+    )
+    month_recur_spend = cursor.fetchone()[0] or 0
+    total_month_spend = month_spend + month_recur_spend
     conn.close()
     return render_template(
-        "index.html", monthly_spending=monthly_spending, datetime=datetime
+        "index.html", monthly_spending=total_month_spend, datetime=datetime
     )
 
 
