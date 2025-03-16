@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 
 import setup.setup_stg as setup_stg
-
-import sqlite3
+import setup.setup_db as setup_db
 
 app = Flask(__name__)
 
@@ -16,45 +15,13 @@ else:
     API_URL = None
 
 
-# Function to get SQL database and create table if no exists
-def get_db(year):
-    db_name = f"expenses_{year}.db"
-    conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS expenses (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        date TEXT,
-                        category TEXT,
-                        item TEXT,
-                        location TEXT,
-                        price REAL,
-                        currency TEXT,
-                        price_sgd REAL)"""
-    )
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS recurring_expenses (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        start_date TEXT,
-                        end_date TEXT,
-                        category TEXT,
-                        item TEXT,
-                        location TEXT,
-                        ori_price REAL,
-                        currency TEXT,
-                        price_sgd REAL)"""
-    )
-    conn.commit()
-    return conn
-
-
 # Function to hook up to SQL database and perform web-based interaction
 ## Add daily expenses (1-time)
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
     data = request.json
     year = datetime.strptime(data["date"], "%Y-%m-%d").year
-    conn = get_db(year)
+    conn = setup_db.get_db(year)
     cursor = conn.cursor()
     if API_URL:
         price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
@@ -84,7 +51,7 @@ def add_recurring():
     data = request.json
     start_year = datetime.strptime(data["start_date"], "%Y-%m").year
     end_year = datetime.strptime(data["end_date"], "%Y-%m").year
-    conn = get_db(start_year)
+    conn = setup_db.get_db(start_year)
     cursor = conn.cursor()
     if API_URL:
         price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
@@ -120,7 +87,7 @@ def add_recurring():
 def index():
     current_year = datetime.now().year
     current_month = datetime.now().strftime("%m")
-    conn = get_db(current_year)
+    conn = setup_db.get_db(current_year)
     cursor = conn.cursor()
     ## Get sum of expenses in the current month
     cursor.execute(
