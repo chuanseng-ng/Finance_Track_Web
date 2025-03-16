@@ -3,8 +3,12 @@ from datetime import datetime
 import setup.setup_stg as setup_stg
 from setup.setup_db import get_db
 
-api_key = setup_stg.cfg_setup()
-API_URL = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/"
+api_key, error_bypass = setup_stg.cfg_setup()
+
+if api_key:
+    API_URL = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/"
+else:
+    API_URL = None
 
 bp = Blueprint("main", __name__)
 
@@ -16,7 +20,12 @@ def add_expense():
         year = datetime.strptime(data["date"], "%Y-%m-%d").year
         conn = get_db(year)
         cursor = conn.cursor()
-        price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
+        if API_URL:
+            price_sgd = setup_stg.convert_to_sgd(
+                API_URL, data["price"], data["currency"]
+            )
+        else:
+            price_sgd = data["price"]
         cursor.execute(
             """INSERT INTO expenses (date, category, item, location, price, currency, price_sgd)
                           VALUES (?, ?, ?, ?, ?, ?, ?)""",
@@ -45,7 +54,12 @@ def add_recurring():
         end_year = datetime.strptime(data["end_date"], "%Y-%m").year
         conn = get_db(start_year)
         cursor = conn.cursor()
-        price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
+        if API_URL:
+            price_sgd = setup_stg.convert_to_sgd(
+                API_URL, data["price"], data["currency"]
+            )
+        else:
+            price_sgd = data["price"]
         months_count = (end_year - start_year) * 12 + (
             datetime.strptime(data["end_date"], "%Y-%m").month
             - datetime.strptime(data["start_date"], "%Y-%m").month
