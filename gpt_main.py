@@ -119,6 +119,21 @@ def add_recurring():
     return jsonify({"message": "Recurring expense added successfully"})
 
 
+@app.route("/add_salary", methods=["POST"])
+def add_salary():
+    data = request.json
+    start_year = datetime.strptime(data["start_date"], "%Y-%m").year
+    conn = get_db(start_year)
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO salary (start_date, end_date, amount)
+                    VALUES (?, ?, ?)""",
+        (data["start_date"], data["end_date"], data["amount"]),
+    )
+
+    return jsonify({"message": "Salary added successfully"})
+
+
 @app.route("/")
 def index():
     current_year = datetime.now().year
