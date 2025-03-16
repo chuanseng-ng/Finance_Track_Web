@@ -20,7 +20,7 @@
   - Plot monthly/yearly expense graph
   - Plot expense graph for custom time period
 - Quality of Life (QoL) items
-  - Add support to skip currency conversion if API key does not exists in user_config.yaml
+  - (Done) Add support to skip currency conversion if API key does not exists in user_config.yaml
 
 ## References
 
