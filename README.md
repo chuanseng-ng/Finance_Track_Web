@@ -14,7 +14,7 @@
 - Implemented
   - Tracks daily expenses
   - Auto currency conversion (XXX to SGD)
-  - Tracks monthly recurring expenses
+  - Tracks monthly recurring expenses (Included in current month's total expense if valid)
 - To-Do
   - Utilizes salary to calculate remaining spending power
   - Plot monthly/yearly expense graph
