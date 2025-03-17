@@ -50,28 +50,30 @@ def add_expense():
 def add_recurring():
     try:
         data = request.json
-        start_year = datetime.strptime(data["start_date"], "%Y-%m").year
-        end_year = datetime.strptime(data["end_date"], "%Y-%m").year
+        start_year = datetime.strptime(data["start_date"], "%Y-%m-%d").year
+        end_date = data.get("end_date")
+        if end_date:
+            end_year = datetime.strptime(end_date, "%Y-%m-%d").year
+        else:
+            end_year = None
         conn = get_db(start_year)
         cursor = conn.cursor()
-        if API_URL:
-            price_sgd = setup_stg.convert_to_sgd(
-                API_URL, data["price"], data["currency"]
+        price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
+        if end_year:
+            months_count = (end_year - start_year) * 12 + (
+                datetime.strptime(end_date, "%Y-%m-%d").month
+                - datetime.strptime(data["start_date"], "%Y-%m-%d").month
+                + 1
             )
+            monthly_price = int(price_sgd) / int(months_count)
         else:
-            price_sgd = data["price"]
-        months_count = (end_year - start_year) * 12 + (
-            datetime.strptime(data["end_date"], "%Y-%m").month
-            - datetime.strptime(data["start_date"], "%Y-%m").month
-            + 1
-        )
-        monthly_price = int(price_sgd) / int(months_count)
+            monthly_price = price_sgd
         cursor.execute(
             """INSERT INTO recurring_expenses (start_date, end_date, category, item, location, ori_price, currency, price_sgd)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 data["start_date"],
-                data["end_date"],
+                end_date,
                 data["category"],
                 data["item"],
                 data["location"],
@@ -100,10 +102,12 @@ def index():
         )
         month_spend = cursor.fetchone()[0] or 0
         cursor.execute(
-            "SELECT SUM(price_sgd) FROM recurring_expenses WHERE (CAST(strftime('%m', start_date) AS INTEGER) <= ? AND CAST(strftime('%Y', start_date) AS INTEGER) <= ?) AND (CAST(strftime('%m', end_date) AS INTEGER) >= ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?)",
+            "SELECT SUM(price_sgd) FROM recurring_expenses WHERE (CAST(strftime('%m', start_date) AS INTEGER) <= ? AND CAST(strftime('%Y', start_date) AS INTEGER) <= ?) AND \
+                (end_date IS ? OR (CAST(strftime('%m', end_date) AS INTEGER) >= ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?))",
             (
                 int(current_month),
                 int(current_year),
+                "",
                 int(current_month),
                 int(current_year),
             ),
