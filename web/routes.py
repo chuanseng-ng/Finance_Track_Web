@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template
 from datetime import datetime, timedelta
+import logging
+
 import setup.setup_stg as setup_stg
 from setup.setup_db import get_db
 
@@ -11,6 +13,8 @@ else:
     API_URL = None
 
 bp = Blueprint("main", __name__)
+
+logging.basicConfig(level=logging.ERROR)
 
 
 @bp.route("/add_expense", methods=["POST"])
@@ -43,7 +47,8 @@ def add_expense():
         conn.close()
         return jsonify({"message": "Expense added successfully"})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logging.error("Exception occurred", exc_info=True)
+        return jsonify({"error": "An internal error has occurred!"}), 500
 
 
 @bp.route("/add_recurring", methods=["POST"])
@@ -86,7 +91,8 @@ def add_recurring():
         conn.close()
         return jsonify({"message": "Recurring expense added successfully"})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logging.error("Exception occurred", exc_info=True)
+        return jsonify({"error": "An internal error has occurred!"}), 500
 
 
 @bp.route("/add_salary", methods=["POST"])
@@ -125,7 +131,8 @@ def add_salary():
         return jsonify({"message": "Salary added successfully"})
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logging.error("Exception occurred", exc_info=True)
+        return jsonify({"error": "An internal error has occurred!"}), 500
 
 
 @bp.route("/")
@@ -178,4 +185,5 @@ def index():
         )
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        logging.error("Exception occurred", exc_info=True)
+        return jsonify({"error": "An internal error has occurred!"}), 500
