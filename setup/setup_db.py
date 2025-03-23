@@ -29,5 +29,12 @@ def get_db(year):
                         currency TEXT,
                         price_sgd REAL)"""
     )
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS salary (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        start_date TEXT,
+                        end_date TEXT,
+                        amount REAL)"""
+    )
     conn.commit()
     return conn

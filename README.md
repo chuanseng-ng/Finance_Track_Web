@@ -15,8 +15,8 @@
   - Tracks daily expenses
   - Auto currency conversion (XXX to SGD)
   - Tracks monthly recurring expenses (Included in current month's total expense if valid)
-- To-Do
   - Utilizes salary to calculate remaining spending power
+- To-Do
   - Plot monthly/yearly expense graph
   - Plot expense graph for custom time period
 - Quality of Life (QoL) items
