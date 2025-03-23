@@ -156,12 +156,13 @@ def index():
 
         cursor.execute(
             "SELECT SUM(amount) FROM salary WHERE (CAST(strftime('%m', start_date) AS INTEGER) <= ? AND CAST(strftime('%Y', start_date) AS INTEGER) <= ?) AND \
-                    (end_date IS ? OR (CAST(strftime('%m', end_date) AS INTEGER) > ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?))",
+                    (end_date IS ? OR (CAST(strftime('%m', end_date) AS INTEGER) > ? AND CAST(strftime('%Y', end_date) AS INTEGER) = ?) OR (CAST(strftime('%Y', end_date) AS INTEGER) > ?))",
             (
                 int(current_month),
                 int(current_year),
                 "",
                 int(current_month),
+                int(current_year),
                 int(current_year),
             ),
         )
