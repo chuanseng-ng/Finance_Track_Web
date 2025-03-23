@@ -167,7 +167,6 @@ def index():
             ),
         )
         month_salary = cursor.fetchone()[0] or 0
-        print(month_salary)
         total_month_balance = month_salary - total_month_spend
 
         conn.close()
