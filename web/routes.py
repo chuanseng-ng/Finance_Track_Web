@@ -1,10 +1,9 @@
 """This module contains the routes for the web application"""
 
 import sqlite3
+import logging
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, render_template
-from datetime import datetime, timedelta
-import logging
 
 import setup.setup_stg as setup_stg
 from setup.setup_db import get_db
@@ -51,7 +50,7 @@ def add_expense():
         conn.commit()
         conn.close()
         return jsonify({"message": "Expense added successfully"})
-    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError) as e:
+    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
         return jsonify({"error": "An internal error has occurred!"}), 500
 
@@ -99,7 +98,7 @@ def add_recurring():
         conn.commit()
         conn.close()
         return jsonify({"message": "Recurring expense added successfully"})
-    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError) as e:
+    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
         return jsonify({"error": "An internal error has occurred!"}), 500
 
@@ -143,7 +142,7 @@ def add_salary():
         conn.close()
         return jsonify({"message": "Salary added successfully"})
 
-    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError) as e:
+    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
         return jsonify({"error": "An internal error has occurred!"}), 500
 
@@ -207,6 +206,6 @@ def index():
             datetime=datetime,
         )
 
-    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError) as e:
+    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
         return jsonify({"error": "An internal error has occurred!"}), 500
