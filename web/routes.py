@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from datetime import datetime
+from datetime import datetime, timedelta
 import setup.setup_stg as setup_stg
 from setup.setup_db import get_db
 
@@ -89,6 +89,45 @@ def add_recurring():
         return jsonify({"error": str(e)}), 500
 
 
+@bp.route("/add_salary", methods=["POST"])
+def add_salary():
+    try:
+        data = request.json
+        start_year = datetime.strptime(data["start_date"], "%Y-%m-%d").year
+        conn = get_db(start_year)
+        cursor = conn.cursor()
+        amount_sgd = setup_stg.convert_to_sgd(API_URL, data["amount"], data["currency"])
+
+        ## Update end_date of previous salary entry if exists
+        cursor.execute("SELECT COUNT(*) FROM salary")
+        salary_count = cursor.fetchone()[0]
+
+        if salary_count > 0:
+            end_date = (
+                datetime.strptime(data["start_date"], "%Y-%m-%d") - timedelta(days=1)
+            ).strftime("%Y-%m-%d")
+            cursor.execute(
+                "UPDATE salary SET end_date = ? WHERE end_date IS ?",
+                (
+                    end_date,
+                    "",
+                ),
+            )
+
+        ## Insert new salary entry
+        cursor.execute(
+            """INSERT INTO salary (start_date, end_date, amount)
+                                  VALUES (?, ?, ?)""",
+            (data["start_date"], "", amount_sgd),
+        )
+        conn.commit()
+        conn.close()
+        return jsonify({"message": "Salary added successfully"})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @bp.route("/")
 def index():
     try:
@@ -103,7 +142,7 @@ def index():
         month_spend = cursor.fetchone()[0] or 0
         cursor.execute(
             "SELECT SUM(price_sgd) FROM recurring_expenses WHERE (CAST(strftime('%m', start_date) AS INTEGER) <= ? AND CAST(strftime('%Y', start_date) AS INTEGER) <= ?) AND \
-                (end_date IS ? OR (CAST(strftime('%m', end_date) AS INTEGER) >= ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?))",
+                    (end_date IS ? OR (CAST(strftime('%m', end_date) AS INTEGER) >= ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?))",
             (
                 int(current_month),
                 int(current_year),
@@ -114,9 +153,29 @@ def index():
         )
         month_recur_spend = cursor.fetchone()[0] or 0
         total_month_spend = month_spend + month_recur_spend
+
+        cursor.execute(
+            "SELECT SUM(amount) FROM salary WHERE (CAST(strftime('%m', start_date) AS INTEGER) <= ? AND CAST(strftime('%Y', start_date) AS INTEGER) <= ?) AND \
+                    (end_date IS ? OR (CAST(strftime('%m', end_date) AS INTEGER) > ? AND CAST(strftime('%Y', end_date) AS INTEGER) >= ?))",
+            (
+                int(current_month),
+                int(current_year),
+                "",
+                int(current_month),
+                int(current_year),
+            ),
+        )
+        month_salary = cursor.fetchone()[0] or 0
+        print(month_salary)
+        total_month_balance = month_salary - total_month_spend
+
         conn.close()
         return render_template(
-            "index.html", monthly_spending=total_month_spend, datetime=datetime
+            "index.html",
+            monthly_spending=total_month_spend,
+            monthly_balance=total_month_balance,
+            datetime=datetime,
         )
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
