@@ -3,8 +3,8 @@
 import sqlite3
 
 
-# Function to get SQL database and create table if no exists
 def get_db(year):
+    """Function to get SQL database and create table if no exists"""
     db_name = f"expenses_{year}.db"
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
