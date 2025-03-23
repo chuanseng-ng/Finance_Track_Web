@@ -1,3 +1,5 @@
+"""Module to setup user configuration and convert other currencies to SGD"""
+
 import requests
 import yaml
 

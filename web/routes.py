@@ -1,6 +1,8 @@
-from flask import Blueprint, request, jsonify, render_template
+"""This module contains the routes for the web application"""
+
 from datetime import datetime, timedelta
-import setup.setup_stg as setup_stg
+from flask import Blueprint, request, jsonify, render_template
+from setup import setup_stg
 from setup.setup_db import get_db
 
 api_key, error_bypass = setup_stg.cfg_setup()

@@ -1,3 +1,5 @@
+"""Module used to create a SQLite database for the expenses and salary data"""
+
 import sqlite3
 
 
