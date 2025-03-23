@@ -8,6 +8,7 @@
 <body>
     <h1>Personal Web-based Expense Tracker</h1>
     <h2>Current Month's Spending: SGD {{ monthly_spending }}</h2>
+    <h2>Current Month's Balance: SGD {{monthly_balance}}</h2>
     
     <h3>Add an Expense</h3>
     <form id="expense-form">
@@ -30,6 +31,14 @@
         Cost: <input type="number" id="recurring_price" required><br>
         Currency: <input type="text" id="recurring_currency" value="SGD" required><br>
         <button type="submit">Add Recurring Expense</button>
+    </form>
+
+    <h3>Add Salary</h3>
+    <form id="salary-form">
+        New Salary Start Date: <input type="date" id="salary_start_date" required><br>
+        Amount: <input type="number" id="salary_amount" required><br>
+        Currency: <input type="text" id="salary_currency" value="SGD" required><br>
+        <button type="submit">Add Salary</button>
     </form>
 
     <script>
@@ -67,6 +76,20 @@
             }).then(response => response.json())
               .then(data => alert(data.message));
         });
+
+        document.getElementById('salary-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch('/add_salary', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    start_date: document.getElementById('salary_start_date').value,
+                    amount: document.getElementById('salary_amount').value,
+                    currency: document.getElementById('salary_currency').value
+                })
+            }).then(response => response.json())
+              .then(data => alert(data.message));
+        });        
     </script>
 </body>
 </html>
