@@ -1,3 +1,5 @@
+"""Main entry point for the application"""
+
 from flask import Flask
 from web.routes import bp as main_bp
 
