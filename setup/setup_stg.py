@@ -17,11 +17,10 @@ def cfg_setup():
     api_key = config["api_key"]
 
     # Make sure API key exists before continuing script
-    if not (api_key):
+    if not api_key:
         # TODO: Move messages to pop-up # pylint: disable=fixme
         print(
-            "Create personal API key at exchangerate-api.com and \
-                input to user_config.yaml"
+            "Create personal API key at exchangerate-api.com and input to user_config.yaml"
         )
         print("Do not upload personal API key!")
         # Skip ValueError case if option enabled and default to using SGD

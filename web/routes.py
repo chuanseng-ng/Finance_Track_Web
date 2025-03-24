@@ -5,7 +5,7 @@ import logging
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, render_template
 
-import setup.setup_stg as setup_stg
+from setup import setup_stg
 from setup.setup_db import get_db
 
 api_key, error_bypass = setup_stg.cfg_setup()
@@ -68,9 +68,7 @@ def add_recurring():
             end_year = None
         conn = get_db(start_year)
         cursor = conn.cursor()
-        price_sgd = setup_stg.convert_to_sgd(
-            API_URL, data["price"], data["currency"]
-        )  # noqa: E501
+        price_sgd = setup_stg.convert_to_sgd(API_URL, data["price"], data["currency"])
         if end_year:
             months_count = (end_year - start_year) * 12 + (
                 datetime.strptime(end_date, "%Y-%m-%d").month
@@ -111,9 +109,7 @@ def add_salary():
         start_year = datetime.strptime(data["start_date"], "%Y-%m-%d").year
         conn = get_db(start_year)
         cursor = conn.cursor()
-        amount_sgd = setup_stg.convert_to_sgd(
-            API_URL, data["amount"], data["currency"]
-        )  # noqa: E501
+        amount_sgd = setup_stg.convert_to_sgd(API_URL, data["amount"], data["currency"])
 
         # Update end_date of previous salary entry if exists
         cursor.execute("SELECT COUNT(*) FROM salary")
@@ -121,8 +117,7 @@ def add_salary():
 
         if salary_count > 0:
             end_date = (
-                datetime.strptime(data["start_date"], "%Y-%m-%d")
-                - timedelta(days=1)  # noqa: E501
+                datetime.strptime(data["start_date"], "%Y-%m-%d") - timedelta(days=1)
             ).strftime("%Y-%m-%d")
             cursor.execute(
                 "UPDATE salary SET end_date = ? WHERE end_date IS ?",
@@ -156,7 +151,7 @@ def index():
         conn = get_db(current_year)
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT SUM(price_sgd) FROM expenses WHERE strftime('%m', date) = ?",  # noqa: E501
+            "SELECT SUM(price_sgd) FROM expenses WHERE strftime('%m', date) = ?",
             (current_month,),
         )
         month_spend = cursor.fetchone()[0] or 0
