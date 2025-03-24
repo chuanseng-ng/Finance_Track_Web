@@ -1,4 +1,4 @@
-yaml==6.0.2
-requests==2.32.3
-pylint==3.3.6
-flask==3.1.0
+yaml==5.2
+requests==2.24.0
+pylint==3.0.0
+flask==3.0.0
