@@ -30,11 +30,11 @@ Note:  Only keep latest 5 version histories
 
 | Version | Description | Changes |
 | :-----: | :---------: | :-----: |
+| V1.0 | Update README for version_control | Add version_control info into README |
 | V0.9 | month_salary calculation update | Add extra-cases in month_salary calculation to cover corner cases |
 | V0.8 | Add salary support | Add salary_input support in web app + Add current month's balance calculation |
 | V0.7 | Update current month's total | Add recurring_expenses in current month's total if valid + Add NULL end_date support |
 | V0.6 | Add bypass for error_case | Add error_bypass option + code refactoring |
-| V0.5 | Add recurring_expenses to current month's total | Add valid recurring expenses into current month's total expenses |
 
 ## References
 
