@@ -1,9 +1,12 @@
 """This module contains the routes for the web application"""
 
+import io
+import base64
 import sqlite3
 import logging
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, render_template
+import matplotlib.pyplot as plt
 
 from setup import setup_stg
 from setup.setup_db import get_db
@@ -137,6 +140,69 @@ def add_salary():
         conn.close()
         return jsonify({"message": "Salary added successfully"})
 
+    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
+        logging.error("Exception occurred", exc_info=True)
+        return jsonify({"error": "An internal error has occurred!"}), 500
+
+
+@bp.route("/plot_expenditure")
+def plot_expenditure():
+    """Function to plot the monthly and yearly expenditure"""
+    try:
+        current_year = datetime.now().year
+        current_month = datetime.now().strftime("%m")
+        conn = get_db(current_year)
+        cursor = conn.cursor()
+
+        # Get monthly expenditure
+        cursor.execute(
+            "SELECT strftime('%d', date) as day, SUM(price_sgd) FROM expenses WHERE strftime('%m', date) = ? GROUP BY day",
+            (current_month,),
+        )
+        month_data = cursor.fetchall()
+
+        # Get yearly expenditure
+        cursor.execute(
+            "SELECT strftime('%m', date) as month, SUM(price_sgd) FROM expenses WHERE strftime('%Y', date) = ? GROUP BY month",
+            (current_year,),
+        )
+        year_data = cursor.fetchall()
+
+        conn.close()
+
+        # Plot monthly expenditure
+        days = [int(day) for day, _ in month_data]
+        month_expenses = [expense for _, expense in month_data]
+        plt.figure(figsize=(10, 5))
+        plt.plot(days, month_expenses, marker="o")
+        plt.title("Current Month's Expenditure")
+        plt.xlabel("Day")
+        plt.ylabel("Expenditure (SGD)")
+        plt.grid(True)
+        month_img = io.BytesIO()
+        plt.savefig(month_img, format="png")
+        month_img.seek(0)
+        month_plot_url = base64.b64encode(month_img.getvalue()).decode()
+
+        # Plot yearly expenditure
+        months = [int(month) for month, _ in year_data]
+        year_expenses = [expense for _, expense in year_data]
+        plt.figure(figsize=(10, 5))
+        plt.plot(months, year_expenses, marker="o")
+        plt.title("Current Year's Expenditure")
+        plt.xlabel("Month")
+        plt.ylabel("Expenditure (SGD)")
+        plt.grid(True)
+        year_img = io.BytesIO()
+        plt.savefig(year_img, format="png")
+        year_img.seek(0)
+        year_plot_url = base64.b64encode(year_img.getvalue()).decode()
+
+        return render_template(
+            "graph_plot.html",
+            month_plot_url=month_plot_url,
+            year_plot_url=year_plot_url,
+        )
     except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
         return jsonify({"error": "An internal error has occurred!"}), 500
