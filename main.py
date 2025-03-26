@@ -4,8 +4,15 @@ import os
 from flask import Flask
 from routes import register_blueprints
 
-app = Flask(__name__)
-register_blueprints(app)
+
+def create_app():
+    """Create and configure the Flask app."""
+    app = Flask(__name__)  # pylint: disable=redefined-outer-name
+    register_blueprints(app)
+    return app
+
+
+app = create_app()
 
 if __name__ == "__main__":
     debug_mode = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
