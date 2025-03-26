@@ -44,6 +44,13 @@
     <h3>View Expenditure Plots</h3>
     <a href="/plot_expenditure">View Current Month's and Year's Expenditure Plots</a>
 
+    <h3>View Expenditure for Custom Date Range</h3>
+    <form id="custom-range-form">
+        Start Date: <input type="date" id="custom_start_date" required><br>
+        End Date: <input type="date" id="custom_end_date" required><br>
+        <button type="submit">View Custom Range Expenditure</button>
+    </form>
+
     <script>
         document.getElementById('expense-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -92,7 +99,14 @@
                 })
             }).then(response => response.json())
               .then(data => alert(data.message));
-        });        
+        });
+
+        document.getElementById('custom-range-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const startDate = document.getElementById('custom_start_date').value;
+            const endDate = document.getElementById('custom_end_date').value;
+            window.location.href = `/plot_custom_expenditure?start_date=${startDate}&end_date=${endDate}`;
+        });
     </script>
 </body>
 </html>
