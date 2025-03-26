@@ -7,7 +7,7 @@ from routes import register_blueprints
 
 def create_app():
     """Create and configure the Flask app."""
-    app = Flask(__name__)
+    app = Flask(__name__)  # pylint: disable=redefined-outer-name
     register_blueprints(app)
     return app
 
