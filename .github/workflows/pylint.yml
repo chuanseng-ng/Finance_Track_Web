@@ -23,9 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyyaml
         pip install -r requirements.txt
-#        pip install pylint
-#        pip install flask
-#        pip install requests
-    - name: Analysing the code with pylint
+    - name: Analysing the code with ruff
       run: |
-        pylint $(git ls-files '*.py')
+        ruff check
+        ruff format
