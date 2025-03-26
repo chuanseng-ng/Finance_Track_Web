@@ -149,7 +149,7 @@ def add_salary():
 def plot_expenditure():
     """Function to plot the monthly and yearly expenditure"""
     try:
-        current_year = datetime.now().year
+        current_year = datetime.now().strftime("%Y")
         current_month = datetime.now().strftime("%m")
         conn = get_db(current_year)
         cursor = conn.cursor()
@@ -185,7 +185,21 @@ def plot_expenditure():
         month_plot_url = base64.b64encode(month_img.getvalue()).decode()
 
         # Plot yearly expenditure
-        months = [int(month) for month, _ in year_data]
+        month_names = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ]
+        months = [month_names[int(month) - 1] for month, _ in year_data]
         year_expenses = [expense for _, expense in year_data]
         plt.figure(figsize=(10, 5))
         plt.plot(months, year_expenses, marker="o")
