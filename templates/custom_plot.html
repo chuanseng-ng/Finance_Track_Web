@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Expenditure Plot</title>
+</head>
+<body>
+    <h1>Expenditure from {{ start_date }} to {{ end_date }}</h1>
+    <img src="data:image/png;base64,{{ custom_plot_url }}" alt="Custom Expenditure Plot">
+    <button onclick="window.location.href='/'">Back to Main Page</button>
+</body>
+</html>

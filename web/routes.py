@@ -222,6 +222,65 @@ def plot_expenditure():
         return jsonify({"error": "An internal error has occurred!"}), 500
 
 
+@bp.route("/plot_custom_expenditure")
+def plot_custom_expenditure():
+    """Function to plot expenditure for a custom date range"""
+    try:
+        # Get start_date and end_date from query parameters
+        start_date = request.args.get("start_date")
+        end_date = request.args.get("end_date")
+
+        if not start_date or not end_date:
+            return jsonify({"error": "Start date and end date are required"}), 400
+
+        conn = get_db(datetime.now().year)
+        cursor = conn.cursor()
+
+        # Query expenditures within the custom date range
+        cursor.execute(
+            """
+            SELECT date, SUM(price_sgd)
+            FROM expenses
+            WHERE date BETWEEN ? AND ?
+            GROUP BY date
+            """,
+            (start_date, end_date),
+        )
+        custom_data = cursor.fetchall()
+        conn.close()
+
+        # Prepare data for plotting
+        dates = [
+            datetime.strptime(date, "%Y-%m-%d").strftime("%d %b")
+            for date, _ in custom_data
+        ]
+        expenses = [expense for _, expense in custom_data]
+
+        # Plot custom date range expenditure
+        plt.figure(figsize=(10, 5))
+        plt.plot(dates, expenses, marker="o")
+        plt.title(f"Expenditure from {start_date} to {end_date}")
+        plt.xlabel("Date")
+        plt.ylabel("Expenditure (SGD)")
+        plt.xticks(rotation=45)
+        plt.grid(True)
+
+        custom_img = io.BytesIO()
+        plt.savefig(custom_img, format="png")
+        custom_img.seek(0)
+        custom_plot_url = base64.b64encode(custom_img.getvalue()).decode()
+
+        return render_template(
+            "custom_plot.html",
+            custom_plot_url=custom_plot_url,
+            start_date=start_date,
+            end_date=end_date,
+        )
+    except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
+        logging.error("Exception occurred", exc_info=True)
+        return jsonify({"error": "An internal error has occurred!"}), 500
+
+
 @bp.route("/")
 def index():
     """Function to render the index page"""
