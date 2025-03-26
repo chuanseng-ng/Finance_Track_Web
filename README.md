@@ -36,6 +36,10 @@ Note:  Only keep latest 5 version histories
 | V0.9 | month_salary calculation update | Add extra-cases in month_salary calculation to cover corner cases |
 | V0.8 | Add salary support | Add salary_input support in web app + Add current month's balance calculation |
 
+## Code Coverage
+<!-- Pytest Coverage Comment:Begin -->
+<!-- Pytest Coverage Comment:End -->
+
 ## References
 
 - NIL
