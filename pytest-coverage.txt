@@ -1,0 +1,41 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.9, pytest-8.3.4, pluggy-1.5.0 -- /usr/share/miniconda/bin/python
+cachedir: .pytest_cache
+rootdir: /home/runner/work/Finance_Track_Web/Finance_Track_Web
+configfile: pyproject.toml
+plugins: cov-6.0.0
+collecting ... collected 22 items
+
+tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [  4%]
+tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [  9%]
+tests/routes/test_index_routes.py::test_index_success PASSED             [ 13%]
+tests/routes/test_index_routes.py::test_index_error PASSED               [ 18%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 22%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 27%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 31%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 36%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 40%]
+tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 45%]
+tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 50%]
+tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 54%]
+tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 59%]
+tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 63%]
+tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 68%]
+tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 72%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 77%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 81%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 86%]
+tests/test_main.py::test_register_blueprints_called PASSED               [ 90%]
+tests/test_main.py::test_debug_mode_enabled PASSED                       [ 95%]
+tests/test_main.py::test_debug_mode_disabled PASSED                      [100%]
+
+- generated xml file: /home/runner/work/Finance_Track_Web/Finance_Track_Web/pytest.xml -
+
+---------- coverage: platform linux, python 3.12.9-final-0 -----------
+Name    Stmts   Miss  Cover   Missing
+-------------------------------------
+TOTAL     519      0   100%
+
+21 files skipped due to complete coverage.
+
+============================== 22 passed in 3.92s ==============================
