@@ -2,5 +2,6 @@
 
 # Define personal API Key
 api_key: ""
+
 # Define error_bypass enable/disable
 error_bypass: True
