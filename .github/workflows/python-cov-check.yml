@@ -1,9 +1,9 @@
-name: Python Package using Conda
+name: Python Unit Test & Coverage Check
 
 on: 
   push:
     branches:
-      - main
+      -code/pre_release 
   pull_request: {}
 
 jobs:
@@ -45,3 +45,29 @@ jobs:
     #    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
     #    # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
     #    flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test with pytest
+      run: |
+        conda install pytest
+        conda install pytest-cov
+        pytest tests -v --cov --junitxml=pytest.xml --cov-report=term-missing:skip-covered | tee pytest-coverage.txt
+
+    - name: Pytest coverage comment
+      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
+      id: coverageComment
+      uses: MishaKav/pytest-coverage-comment@main
+      with:
+        pytest-coverage-path: ./pytest-coverage.txt
+        junitxml-path: ./pytest.xml
+
+    - name: Update README with Coverage HTML
+      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
+      run: |
+        sed -i '/<!-- Pytest Coverage Comment:Begin -->/,/<!-- Pytest Coverage Comment:End -->/c\<!-- Pytest Coverage Comment:Begin -->\n\${{ steps.coverageComment.outputs.coverageHtml }}\n<!-- Pytest Coverage Comment:End -->' ./README.md
+
+    - name: Commit & Push changes to README
+      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
+      uses: actions-js/push@master
+      with:
+        message: Update coverage in README
+        github_token: ${{ secrets.GITHUB_TOKEN }}
