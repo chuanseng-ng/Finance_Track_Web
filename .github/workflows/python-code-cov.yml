@@ -57,6 +57,7 @@ jobs:
       id: coverageComment
       uses: MishaKav/pytest-coverage-comment@main
       with:
+        default-branch: code/pre_release
         pytest-coverage-path: ./pytest-coverage.txt
         junitxml-path: ./pytest.xml
 
@@ -69,5 +70,6 @@ jobs:
       if: ${{ github.ref == 'refs/heads/code/pre_release' }}
       uses: actions-js/push@master
       with:
+        branch: code/pre_release
         message: Update coverage in README
         github_token: ${{ secrets.GITHUB_TOKEN }}
