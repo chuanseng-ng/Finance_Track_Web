@@ -1,2 +1,7 @@
+# This is the user configuration file for the Personal Finance Tracker application.
+
+# Define personal API Key
 api_key: ""
+
+# Define error_bypass enable/disable
 error_bypass: True
