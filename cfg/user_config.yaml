@@ -1,2 +1,4 @@
+# This is a user configuration file for the application.
+
 api_key: ""
 error_bypass: True
