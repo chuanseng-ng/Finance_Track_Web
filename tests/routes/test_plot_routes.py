@@ -112,3 +112,21 @@ def test_plot_custom_expenditure_missing_params(mock_get_db, client):
     assert response.status_code == 400
     assert response.json == {"error": "Start date and end date are required"}
     mock_get_db.assert_not_called()
+
+
+@patch("routes.plot_routes.get_db")
+# pylint: disable=redefined-outer-name
+def test_plot_custom_expenditure_error(mock_get_db, client):
+    """Test error handling for the /plot_custom_expenditure route."""
+    # Mock database connection to raise an exception
+    mock_get_db.side_effect = sqlite3.DatabaseError("Mocked database error")
+
+    # Send GET request
+    response = client.get(
+        "/plot_custom_expenditure?start_date=2025-03-01&end_date=2025-03-02"
+    )
+
+    # Assertions
+    assert response.status_code == 500
+    assert response.json == {"error": "An internal error has occurred!"}
+    mock_get_db.assert_called_once()

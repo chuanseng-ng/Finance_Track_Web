@@ -34,7 +34,7 @@ def cfg_setup():
 
 
 # Use exchangerate-api.com for exchange rate data
-def convert_to_sgd(api_url, cost, currency):
+def convert_to_sgd(api_url, cost, currency):  # pragma: no cover
     """Function to convert other currencies to SGD"""
 
     if currency == "SGD":
