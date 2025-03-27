@@ -53,21 +53,25 @@ jobs:
         pytest tests -v --cov --junitxml=pytest.xml --cov-report=term-missing:skip-covered | tee pytest-coverage.txt
 
     - name: Pytest coverage comment
-      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       id: coverageComment
       uses: MishaKav/pytest-coverage-comment@main
       with:
         pytest-coverage-path: ./pytest-coverage.txt
         junitxml-path: ./pytest.xml
 
-    - name: Update README with Coverage Html
-      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
+    - name: Update README with Coverage HTML & Commit & Push changes
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: |
+        git checkout code/pre_release
         sed -i '/<!-- Pytest Coverage Comment:Begin -->/,/<!-- Pytest Coverage Comment:End -->/c\<!-- Pytest Coverage Comment:Begin -->\n\${{ steps.coverageComment.outputs.coverageHtml }}\n<!-- Pytest Coverage Comment:End -->' ./README.md
+        git commit -am "Update coverage on README"
+        git push origin code/pre_release
 
-    - name: Commit & Push changes to README
-      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
-      uses: actions-js/push@master
-      with:
-        message: Update coverage on README
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Commit & Push changes to README in code/pre_release & Create pull request to main
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        git checkout code/pre_release
+        gh pr create -B main -H code/pre_release -t "[README] Update coverage results in README" -b "Created by Github Action"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
