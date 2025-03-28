@@ -39,8 +39,8 @@ Note:  Only keep latest 5 version histories
 
 | Version | Description | Changes |
 | :-----: | :---------: | :-----: |
-| V1.2 | Custom time period expenses graph plot | Add support for custom time period expense plot |
-| V1.1 | Monthly/yearly expenses graph plot | Add support for current month/year expense plot |
+| V2.1 | Custom time period expenses graph plot | Add support for custom time period expense plot |
+| V2.0 | Monthly/yearly expenses graph plot | Add support for current month/year expense plot |
 | V1.0 | Update README for version_control | Add version_control info into README |
 | V0.9 | month_salary calculation update | Add extra-cases in month_salary calculation to cover corner cases |
 | V0.8 | Add salary support | Add salary_input support in web app + Add current month's balance calculation |
