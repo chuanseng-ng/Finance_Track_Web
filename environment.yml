@@ -4,3 +4,6 @@ dependencies:
   - pyyaml
   - requests
   - matplotlib
+  - openpyxl
+  - plotly
+  - pandas

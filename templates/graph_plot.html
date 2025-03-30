@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expenditure Plots</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <h1>Expenditure Plots</h1>
 
     <h2>Current Month's Expenditure</h2>
-    <img src="data:image/png;base64,{{ month_plot_url }}" alt="Current Month's Expenditure Plot">
+    <div>
+        {{ month_plot_html|safe }}
+    </div>
 
     <h2>Current Year's Expenditure</h2>
-    <img src="data:image/png;base64,{{ year_plot_url }}" alt="Current Year's Expenditure Plot">
+    <div>
+        {{ year_plot_html|safe }}
+    </div>
 
     <!-- Back Button -->
      <button onclick="window.location.href='/'">Back to Main Page</button>

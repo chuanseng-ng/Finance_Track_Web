@@ -4,9 +4,10 @@ import logging
 import sqlite3
 
 from datetime import datetime
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, request, redirect, url_for
 
 from setup.setup_db import get_db
+from db_import.db_import import update_database_from_excel
 
 index_bp = Blueprint("index", __name__)
 
@@ -73,3 +74,27 @@ def index():
     except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
         return jsonify({"error": "An internal error has occurred!"}), 500
+
+
+@index_bp.route("/upload_excel", methods=["GET", "POST"])
+def upload_excel():
+    """Render the page to input the Excel file path and handle the upload."""
+    if request.method == "POST":
+        excel_path = request.form.get("excel_path")
+        year = request.form.get("year")
+
+        if not excel_path or not year:
+            jsonify({"error": "Please provide both the Excel file path and the year."})
+            return redirect(url_for("index.upload_excel"))
+
+        try:
+            # Call the function to update the database
+            update_database_from_excel(excel_path, int(year))
+            jsonify({"message": "Database updated successfully!"})
+        except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
+            logging.error("Exception occurred", exc_info=True)
+            return jsonify({"error": "An internal error has occurred!"}), 500
+
+        return redirect(url_for("index.index"))
+
+    return render_template("upload_excel.html")
