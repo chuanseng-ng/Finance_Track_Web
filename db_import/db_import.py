@@ -88,6 +88,8 @@ def update_database_from_excel(file_path, db_year):
         ):  # Update the subsequent sheets (month names) into the expenses table
             month_data = pd.read_excel(excel_data, sheet_name=sheet_name, header=None)
 
+            real_row_idx = 0
+
             for row_idx, row in month_data.iterrows():
                 if pd.isna(row.iloc[1]):
                     real_row_idx = row_idx + 1
