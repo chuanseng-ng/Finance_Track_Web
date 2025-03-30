@@ -1,7 +1,16 @@
 """This module contains the function to update the database from an Excel file."""
 
+from datetime import datetime
 import sqlite3
 import pandas as pd
+
+
+def month_name_to_int(month_name):
+    """Convert a month name (e.g., 'Jan') to its corresponding integer (e.g., 1)."""
+    try:
+        return datetime.strptime(month_name, "%b").month  # Parse abbreviated month name
+    except ValueError:
+        return None  # Return None if the month name is invalid
 
 
 def update_database_from_excel(file_path, db_year):
@@ -35,7 +44,10 @@ def update_database_from_excel(file_path, db_year):
                 try:
                     if row["Start Month"] == "-":
                         return "2023-01-01"  # Default to January 1, 2023 if month is missing
-                    return f"{int(row['Start Year'])}-{int(row['Start Month']):02d}-01"
+                    month_int = month_name_to_int(
+                        row["Start Month"]
+                    )  # Convert month name to integer
+                    return f"{int(row['Start Year'])}-{month_int:02d}-01"
                 except (ValueError, TypeError, KeyError):
                     return None
 
@@ -48,7 +60,10 @@ def update_database_from_excel(file_path, db_year):
                 try:
                     if row["End Month"] == "-":
                         return None  # Default to None if month is missing
-                    return f"{int(row['End Year'])}-{int(row['End Month']):02d}-01"
+                    month_int = month_name_to_int(
+                        row["End Month"]
+                    )  # Convert month name to integer
+                    return f"{int(row['End Year'])}-{month_int:02d}-01"
                 except (ValueError, TypeError, KeyError):
                     return None
 
@@ -66,7 +81,7 @@ def update_database_from_excel(file_path, db_year):
                         row["Location"],
                     ),
                 )
-                if cursor.fetchone()[0] == 0:  # If the record does not exist
+                if cursor.fetchone()[0]:  # If the record does not exist
                     cursor.execute(
                         """INSERT OR REPLACE INTO recurring_expenses (
                             start_date, end_date, category, item, location, ori_price, currency, price_sgd
