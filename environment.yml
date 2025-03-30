@@ -5,3 +5,4 @@ dependencies:
   - requests
   - matplotlib
   - openpyxl
+  - plotly
