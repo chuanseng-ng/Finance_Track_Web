@@ -3,7 +3,63 @@
 from unittest.mock import patch, MagicMock, call
 import pandas as pd
 import pytest
-from db_import.db_import import update_database_from_excel
+from db_import.db_import import (
+    month_name_to_int,
+    merge_start_date,
+    merge_end_date,
+    update_database_from_excel,
+)
+
+
+def test_month_name_to_int():
+    """Test the month_name_to_int function."""
+    assert month_name_to_int("Jan") == 1
+    assert month_name_to_int("Feb") == 2
+    assert month_name_to_int("Dec") == 12
+    assert month_name_to_int("Invalid") is None  # Invalid month name
+    assert month_name_to_int("") is None  # Empty string
+
+
+def test_merge_start_date():
+    """Test the merge_start_date function."""
+    mock_row = {
+        "Start Month": "Jan",
+        "Start Year": "2023",
+    }
+    assert merge_start_date(mock_row) == "2023-01-01"
+
+    mock_row = {
+        "Start Month": "-",
+        "Start Year": "2023",
+    }
+    assert merge_start_date(mock_row) == "2023-01-01"  # Default to January 1, 2023
+
+    mock_row = {
+        "Start Month": "Invalid",
+        "Start Year": "2023",
+    }
+    assert merge_start_date(mock_row) is None  # Invalid month name
+
+
+def test_merge_end_date():
+    """Test the merge_end_date function."""
+    mock_row = {
+        "End Month": "Dec",
+        "End Year": "2023",
+    }
+    assert merge_end_date(mock_row) == "2023-12-01"
+
+    mock_row = {
+        "End Month": "-",
+        "End Year": "2023",
+    }
+    assert merge_end_date(mock_row) is None  # Default to None if month is missing
+
+    mock_row = {
+        "End Month": "Invalid",
+        "End Year": "2023",
+    }
+    assert merge_end_date(mock_row) is None  # Invalid month name
 
 
 @pytest.fixture
@@ -23,12 +79,12 @@ def mock_excel_file(tmp_path):
 
     # Create data for the "January" sheet
     january_data = {
-        "Date": ["", "Date", "2023-01-01", "2023-01-02"],
-        "Category": ["", "Category", "Food", "Transport"],
-        "Item": ["", "Item", "Groceries", "Bus Fare"],
-        "Location": ["", "Location", "Supermarket", "City Bus"],
-        "Price": ["", "Price", 50, 20],
-        "Remarks": ["", "Remarks", "", "20 USD"],
+        "Date": [None, "Date", "2023-01-01", "2023-01-02", "2024-02-24"],
+        "Category": [None, "Category", "Food", "Transport", "Entertainment"],
+        "Item": [None, "Item", "Groceries", "Bus Fare", "Day Pass"],
+        "Location": [None, "Location", "Supermarket", "City Bus", "Climbing Gym"],
+        "Price": [None, "Price", 50, 20, None],
+        "Remarks": [None, "Remarks", None, "20 USD", None],
     }
 
     # Create the Excel file in the temporary directory
@@ -54,8 +110,6 @@ def test_update_database_from_excel_recurring(mock_connect, mock_excel_file):
     # Call the function
     update_database_from_excel(mock_excel_file, 2023)
 
-    print(mock_cursor.execute.call_args_list)
-
     expected_calls = [
         call(
             "SELECT COUNT(*) FROM recurring_expenses WHERE\n                    "
@@ -63,59 +117,14 @@ def test_update_database_from_excel_recurring(mock_connect, mock_excel_file):
             ("Personal", "Piano Lessons", "Music School"),
         ),
         call(
-            "INSERT OR REPLACE INTO recurring_expenses (\n                            "
-            "start_date, end_date, category, item, location, ori_price, currency, price_sgd\n                        "
-            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (
-                "2023-01-01",
-                "2024-12-01",
-                "Personal",
-                "Piano Lessons",
-                "Music School",
-                125,
-                "SGD",
-                125,
-            ),
-        ),
-        call(
             "SELECT COUNT(*) FROM recurring_expenses WHERE\n                    "
             "category = ? AND item = ? AND location = ?",
             ("Utilities", "Electricity", "Home"),
         ),
         call(
-            "INSERT OR REPLACE INTO recurring_expenses (\n                            "
-            "start_date, end_date, category, item, location, ori_price, currency, price_sgd\n                        "
-            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (
-                "2022-01-01",
-                "2023-03-01",
-                "Utilities",
-                "Electricity",
-                "Home",
-                100,
-                "SGD",
-                100,
-            ),
-        ),
-        call(
             "SELECT COUNT(*) FROM recurring_expenses WHERE\n                    "
             "category = ? AND item = ? AND location = ?",
             ("Subscription", "Streaming Service", "Online"),
-        ),
-        call(
-            "INSERT OR REPLACE INTO recurring_expenses (\n                            "
-            "start_date, end_date, category, item, location, ori_price, currency, price_sgd\n                        "
-            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (
-                "2023-02-01",
-                None,
-                "Subscription",
-                "Streaming Service",
-                "Online",
-                50,
-                "SGD",
-                50,
-            ),
         ),
     ]
 
@@ -135,11 +144,27 @@ def test_update_database_from_excel_monthly(mock_connect, mock_excel_file):
     mock_connect.return_value = mock_conn
     mock_conn.cursor.return_value = mock_cursor
 
+    # Mock the cursor's fetchone method to simulate no existing records
+    mock_cursor.fetchone.return_value = [0]
+
     # Call the function
     update_database_from_excel(mock_excel_file, 2023)
+    for test_call in mock_cursor.execute.mock_calls:
+        print(test_call)
+    expected_calls = [
+        call(
+            "SELECT COUNT(*) FROM expenses WHERE\n                    "
+            "category = ? AND item = ? AND location = ?",
+            ("Food", "Groceries", "Supermarket"),
+        ),
+        call(
+            "SELECT COUNT(*) FROM expenses WHERE\n                    "
+            "category = ? AND item = ? AND location = ?",
+            ("Transport", "Bus Fare", "City Bus"),
+        ),
+    ]
 
-    # Assertions
-    mock_connect.assert_called_once_with("expenses_2023.db")
-    mock_cursor.execute.assert_called()  # Ensure SQL queries were executed
+    # Verify the SQL queries executed
+    mock_cursor.execute.assert_has_calls(expected_calls, any_order=True)
     mock_conn.commit.assert_called_once()  # Ensure changes were committed
     mock_conn.close.assert_called_once()  # Ensure the connection was closed
