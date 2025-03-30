@@ -1,13 +1,10 @@
 """This module contains the routes for plotting expenditure."""
 
-import io
-import base64
 import sqlite3
 import logging
 
 from datetime import datetime
 from flask import Blueprint, request, render_template, jsonify
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 from setup.setup_db import get_db
@@ -40,21 +37,32 @@ def plot_expenditure():
 
         conn.close()
 
-        # Plot monthly expenditure
+        # Prepare data for monthly expenditure
         days = [int(day) for day, _ in month_data]
         month_expenses = [expense for _, expense in month_data]
-        plt.figure(figsize=(10, 5))
-        plt.plot(days, month_expenses, marker="o")
-        plt.title("Current Month's Expenditure")
-        plt.xlabel("Day")
-        plt.ylabel("Expenditure (SGD)")
-        plt.grid(True)
-        month_img = io.BytesIO()
-        plt.savefig(month_img, format="png")
-        month_img.seek(0)
-        month_plot_url = base64.b64encode(month_img.getvalue()).decode()
 
-        # Plot yearly expenditure
+        # Create a Plotly figure for monthly expenditure
+        month_fig = go.Figure()
+        month_fig.add_trace(
+            go.Scatter(
+                x=days,
+                y=month_expenses,
+                mode="lines+markers",
+                marker=dict(size=8),
+                line=dict(color="blue"),
+                hovertemplate="<b>Day:</b> %{x}<br><b>Expenditure:</b> SGD %{y}<extra></extra>",
+            )
+        )
+        month_fig.update_layout(
+            title="Current Month's Expenditure",
+            xaxis_title="Day",
+            yaxis_title="Expenditure (SGD)",
+            xaxis=dict(tickmode="linear"),
+            template="plotly_white",
+        )
+        month_plot_html = month_fig.to_html(full_html=False)
+
+        # Prepare data for yearly expenditure
         month_names = [
             "Jan",
             "Feb",
@@ -71,21 +79,32 @@ def plot_expenditure():
         ]
         months = [month_names[int(month) - 1] for month, _ in year_data]
         year_expenses = [expense for _, expense in year_data]
-        plt.figure(figsize=(10, 5))
-        plt.plot(months, year_expenses, marker="o")
-        plt.title("Current Year's Expenditure")
-        plt.xlabel("Month")
-        plt.ylabel("Expenditure (SGD)")
-        plt.grid(True)
-        year_img = io.BytesIO()
-        plt.savefig(year_img, format="png")
-        year_img.seek(0)
-        year_plot_url = base64.b64encode(year_img.getvalue()).decode()
 
+        # Create a Plotly figure for yearly expenditure
+        year_fig = go.Figure()
+        year_fig.add_trace(
+            go.Scatter(
+                x=months,
+                y=year_expenses,
+                mode="lines+markers",
+                marker=dict(size=8),
+                line=dict(color="green"),
+                hovertemplate="<b>Month:</b> %{x}<br><b>Expenditure:</b> SGD %{y}<extra></extra>",
+            )
+        )
+        year_fig.update_layout(
+            title="Current Year's Expenditure",
+            xaxis_title="Month",
+            yaxis_title="Expenditure (SGD)",
+            template="plotly_white",
+        )
+        year_plot_html = year_fig.to_html(full_html=False)
+
+        # Render the template with the Plotly plots
         return render_template(
             "graph_plot.html",
-            month_plot_url=month_plot_url,
-            year_plot_url=year_plot_url,
+            month_plot_html=month_plot_html,
+            year_plot_html=year_plot_html,
         )
     except (KeyError, ValueError, TypeError, sqlite3.DatabaseError):
         logging.error("Exception occurred", exc_info=True)
