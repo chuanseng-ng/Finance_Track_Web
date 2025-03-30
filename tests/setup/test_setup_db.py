@@ -20,9 +20,6 @@ def test_get_db_creates_tables(mock_connect):
     # Verify the database name
     mock_connect.assert_called_once_with(f"expenses_{year}.db")
 
-    # Debug: Print actual calls to mock_cursor.execute
-    print(mock_cursor.execute.call_args_list)
-
     # Verify the SQL commands to create tables
     expected_calls = [
         call(
