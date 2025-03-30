@@ -57,3 +57,62 @@ def test_index_error(mock_get_db, client):  # pylint: disable=redefined-outer-na
     assert response.status_code == 500
     assert response.json == {"error": "An internal error has occurred!"}
     mock_get_db.assert_called_once()
+
+
+def test_upload_excel_get(client):
+    """Test the GET request to the /upload_excel route."""
+    response = client.get("/upload_excel")
+    assert response.status_code == 200
+    assert b"Upload Excel File" in response.data  # Ensure the page renders correctly
+
+
+@patch("routes.index_routes.update_database_from_excel")
+def test_upload_excel_post_success(mock_update_database, client):
+    """Test the POST request to the /upload_excel route with valid data."""
+    # Mock the update_database_from_excel function
+    mock_update_database.return_value = None
+
+    # Send POST request with valid data
+    response = client.post(
+        "/upload_excel",
+        data={"excel_path": "mock_file.xlsx", "year": "2023"},
+        follow_redirects=True,
+    )
+
+    # Assertions
+    assert response.status_code == 200
+    mock_update_database.assert_called_once_with("mock_file.xlsx", 2023)
+
+
+@patch("routes.index_routes.update_database_from_excel")
+def test_upload_excel_post_missing_data(mock_update_database, client):
+    """Test the POST request to the /upload_excel route with missing data."""
+    # Send POST request with missing data
+    response = client.post(
+        "/upload_excel",
+        data={"excel_path": "", "year": ""},
+        follow_redirects=True,
+    )
+
+    # Assertions
+    assert response.status_code == 200  # Redirect back to /upload_excel
+    mock_update_database.assert_not_called()
+
+
+@patch("routes.index_routes.update_database_from_excel")
+def test_upload_excel_post_exception(mock_update_database, client):
+    """Test the POST request to the /upload_excel route when an exception occurs."""
+    # Mock the update_database_from_excel function to raise an exception
+    mock_update_database.side_effect = ValueError("Mock exception")
+
+    # Send POST request with valid data
+    response = client.post(
+        "/upload_excel",
+        data={"excel_path": "mock_file.xlsx", "year": "2023"},
+        follow_redirects=True,
+    )
+
+    # Assertions
+    assert response.status_code == 500
+    assert b"An internal error has occurred!" in response.data
+    mock_update_database.assert_called_once_with("mock_file.xlsx", 2023)
