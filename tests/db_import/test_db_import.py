@@ -18,7 +18,7 @@ def mock_excel_file(tmp_path):
         "Start Month": ["Start Month", "-", "Jan", "Feb"],
         "Start Year": ["Start Year", "-", "2022", "2023"],
         "End Month": ["End Month", "Dec", "Mar", "-"],
-        "End Year": ["End Year", "2022", "2023", "-"],
+        "End Year": ["End Year", "2024", "2023", "-"],
     }
 
     # Create data for the "January" sheet
@@ -54,53 +54,67 @@ def test_update_database_from_excel_recurring(mock_connect, mock_excel_file):
     # Call the function
     update_database_from_excel(mock_excel_file, 2023)
 
-    for test_call in mock_cursor.execute.mock_calls:
-        print(test_call)
+    print(mock_cursor.execute.call_args_list)
 
     expected_calls = [
         call(
-            """INSERT OR REPLACE INTO recurring_expenses (
-            start_date, end_date, category, item, location, ori_price, currency, price_sgd
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            "SELECT COUNT(*) FROM recurring_expenses WHERE\n                    "
+            "category = ? AND item = ? AND location = ?",
+            ("Personal", "Piano Lessons", "Music School"),
+        ),
+        call(
+            "INSERT OR REPLACE INTO recurring_expenses (\n                            "
+            "start_date, end_date, category, item, location, ori_price, currency, price_sgd\n                        "
+            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
-                "2023-01-01",  # start_date
-                None,  # end_date
-                "Personal",  # category
-                "Piano Lessons",  # item
-                "Music School",  # location
-                125,  # ori_price
-                "SGD",  # currency
-                125,  # price_sgd
+                "2023-01-01",
+                "2024-12-01",
+                "Personal",
+                "Piano Lessons",
+                "Music School",
+                125,
+                "SGD",
+                125,
             ),
         ),
         call(
-            """INSERT OR REPLACE INTO recurring_expenses (
-            start_date, end_date, category, item, location, ori_price, currency, price_sgd
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            "SELECT COUNT(*) FROM recurring_expenses WHERE\n                    "
+            "category = ? AND item = ? AND location = ?",
+            ("Utilities", "Electricity", "Home"),
+        ),
+        call(
+            "INSERT OR REPLACE INTO recurring_expenses (\n                            "
+            "start_date, end_date, category, item, location, ori_price, currency, price_sgd\n                        "
+            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
-                None,  # start_date
-                None,  # end_date
-                "Utilities",  # category
-                "Electricity",  # item
-                "Home",  # location
-                100,  # ori_price
-                "SGD",  # currency
-                100,  # price_sgd
+                "2022-01-01",
+                "2023-03-01",
+                "Utilities",
+                "Electricity",
+                "Home",
+                100,
+                "SGD",
+                100,
             ),
         ),
         call(
-            """INSERT OR REPLACE INTO recurring_expenses (
-            start_date, end_date, category, item, location, ori_price, currency, price_sgd
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            "SELECT COUNT(*) FROM recurring_expenses WHERE\n                    "
+            "category = ? AND item = ? AND location = ?",
+            ("Subscription", "Streaming Service", "Online"),
+        ),
+        call(
+            "INSERT OR REPLACE INTO recurring_expenses (\n                            "
+            "start_date, end_date, category, item, location, ori_price, currency, price_sgd\n                        "
+            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
-                None,  # start_date
-                None,  # end_date
-                "Subscription",  # category
-                "Streaming Service",  # item
-                "Online",  # location
-                50,  # ori_price
-                "SGD",  # currency
-                50,  # price_sgd
+                "2023-02-01",
+                None,
+                "Subscription",
+                "Streaming Service",
+                "Online",
+                50,
+                "SGD",
+                50,
             ),
         ),
     ]
