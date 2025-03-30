@@ -102,23 +102,51 @@ def plot_custom_expenditure():
         if not start_date or not end_date:
             return jsonify({"error": "Start date and end date are required"}), 400
 
-        conn = get_db(datetime.now().year)
-        cursor = conn.cursor()
+        # Parse the start and end dates
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").strftime("%Y-%m-%d")
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").strftime("%Y-%m-%d")
+        start_year = int(start_date.split("-")[0])
+        end_year = int(end_date.split("-")[0])
 
-        # Query expenditures within the custom date range
-        cursor.execute(
-            """
-            SELECT date, SUM(price_sgd)
-            FROM expenses
-            WHERE date BETWEEN ? AND ?
-            GROUP BY date
-            """,
-            (start_date, end_date),
-        )
-        custom_data = cursor.fetchall()
-        conn.close()
+        # Initialize list to store all data
+        custom_data = []
+
+        # Loop through each year in the range and query the respective database
+        for year in range(start_year, end_year + 1):
+            conn = get_db(year)
+            cursor = conn.cursor()
+
+            # Adjust the date range for the current year
+            year_start_date = max(start_date, f"{year}-01-01")
+            year_end_date = min(end_date, f"{year}-12-31")
+
+            # Query expenditures within the custom date range for the current year
+            cursor.execute(
+                """
+                SELECT date, SUM(price_sgd)
+                FROM expenses
+                WHERE date BETWEEN ? AND ?
+                GROUP BY date
+                """,
+                (year_start_date, year_end_date),
+            )
+            # Format the date to ensure consistency
+            custom_data.extend(
+                [
+                    (
+                        datetime.strptime(row[0].split(" ")[0], "%Y-%m-%d").strftime(
+                            "%Y-%m-%d"
+                        ),
+                        row[1],
+                    )
+                    for row in cursor.fetchall()
+                ]
+            )
+            conn.close()
 
         # Prepare data for plotting
+        custom_data.sort(key=lambda x: x[0])  # Sort by date
+        print(custom_data)
         dates = [
             datetime.strptime(date, "%Y-%m-%d").strftime("%d %b")
             for date, _ in custom_data
