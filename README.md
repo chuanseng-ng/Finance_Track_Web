@@ -25,13 +25,13 @@
   - Auto currency conversion (XXX to SGD)
   - Tracks monthly recurring expenses (Included in current month's total expense if valid)
   - Utilizes salary to calculate remaining spending power
-  - Plot monthly/yearly expense graph
-  - Plot expense graph for custom time period
+  - Plot monthly/yearly expense graph (Using plotly)
+  - Plot expense graph for custom time period (Using plotly)
 - To-Do
-  - Legacy database import
   - Web app UI overhaul
 - Quality of Life (QoL) items
   - (Done) Add support to skip currency conversion if API key does not exists in user_config.yaml
+  - Legacy database import (Specific format in Excel)
 
 ## Version Control
 
