@@ -8,6 +8,7 @@ import logging
 from datetime import datetime
 from flask import Blueprint, request, render_template, jsonify
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 from setup.setup_db import get_db
 
@@ -146,30 +147,35 @@ def plot_custom_expenditure():
 
         # Prepare data for plotting
         custom_data.sort(key=lambda x: x[0])  # Sort by date
-        print(custom_data)
-        dates = [
-            datetime.strptime(date, "%Y-%m-%d").strftime("%d %b")
-            for date, _ in custom_data
-        ]
+        dates = [date for date, _ in custom_data]
         expenses = [expense for _, expense in custom_data]
 
-        # Plot custom date range expenditure
-        plt.figure(figsize=(10, 5))
-        plt.plot(dates, expenses, marker="o")
-        plt.title(f"Expenditure from {start_date} to {end_date}")
-        plt.xlabel("Date")
-        plt.ylabel("Expenditure (SGD)")
-        plt.xticks(rotation=45)
-        plt.grid(True)
+        # Create an interactive plot using Plotly
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=dates,
+                y=expenses,
+                mode="lines+markers",
+                marker={"size": 8},
+                line={"color": "blue"},
+                hovertemplate="<b>Date:</b> %{x}<br><b>Expenditure:</b> SGD %{y}<extra></extra>",
+            )
+        )
+        fig.update_layout(
+            title=f"Expenditure from {start_date} to {end_date}",
+            xaxis_title="Date",
+            yaxis_title="Expenditure (SGD)",
+            xaxis={"tickformat": "%d %b"},
+            template="plotly_white",
+        )
 
-        custom_img = io.BytesIO()
-        plt.savefig(custom_img, format="png")
-        custom_img.seek(0)
-        custom_plot_url = base64.b64encode(custom_img.getvalue()).decode()
+        # Convert the plot to HTML
+        plot_html = fig.to_html(full_html=False)
 
         return render_template(
             "custom_plot.html",
-            custom_plot_url=custom_plot_url,
+            plot_html=plot_html,
             start_date=start_date,
             end_date=end_date,
         )

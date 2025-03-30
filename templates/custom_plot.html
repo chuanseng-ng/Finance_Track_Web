@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Expenditure Plot</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <h1>Custom Time Period Expenditure Plot</h1>
     <h2>Expenditure from {{ start_date }} to {{ end_date }}</h2>
-    <img src="data:image/png;base64,{{ custom_plot_url }}" alt="Custom Expenditure Plot">
+    <div>
+        {{ plot_html|safe }}
+    </div>
+    <br>
     <button onclick="window.location.href='/'">Back to Main Page</button>
 </body>
 </html>
