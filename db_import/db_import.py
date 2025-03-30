@@ -13,6 +13,30 @@ def month_name_to_int(month_name):
         return None  # Return None if the month name is invalid
 
 
+# Merge "Start Month" and "Start Year" into "Start Date"
+def merge_start_date(row):
+    try:
+        if row["Start Month"] == "-":
+            return "2023-01-01"  # Default to January 1, 2023 if month is missing
+        month_int = month_name_to_int(
+            row["Start Month"]
+        )  # Convert month name to integer
+        return f"{int(row['Start Year'])}-{month_int:02d}-01"
+    except (ValueError, TypeError, KeyError):
+        return None
+
+
+# Merge "End Month" and "End Year" into "End Date" (handle missing end dates)
+def merge_end_date(row):
+    try:
+        if row["End Month"] == "-":
+            return None  # Default to None if month is missing
+        month_int = month_name_to_int(row["End Month"])  # Convert month name to integer
+        return f"{int(row['End Year'])}-{month_int:02d}-01"
+    except (ValueError, TypeError, KeyError):
+        return None
+
+
 def update_database_from_excel(file_path, db_year):
     """
     Update the database with data from an Excel file.
@@ -39,33 +63,9 @@ def update_database_from_excel(file_path, db_year):
             ]  # Set the first row as header
             recurring_data = recurring_data[1:]
 
-            # Merge "Start Month" and "Start Year" into "Start Date"
-            def merge_start_date(row):
-                try:
-                    if row["Start Month"] == "-":
-                        return "2023-01-01"  # Default to January 1, 2023 if month is missing
-                    month_int = month_name_to_int(
-                        row["Start Month"]
-                    )  # Convert month name to integer
-                    return f"{int(row['Start Year'])}-{month_int:02d}-01"
-                except (ValueError, TypeError, KeyError):
-                    return None
-
             recurring_data["start_date"] = recurring_data.apply(
                 merge_start_date, axis=1
             )
-
-            # Merge "End Month" and "End Year" into "End Date" (handle missing end dates)
-            def merge_end_date(row):
-                try:
-                    if row["End Month"] == "-":
-                        return None  # Default to None if month is missing
-                    month_int = month_name_to_int(
-                        row["End Month"]
-                    )  # Convert month name to integer
-                    return f"{int(row['End Year'])}-{month_int:02d}-01"
-                except (ValueError, TypeError, KeyError):
-                    return None
 
             recurring_data["end_date"] = recurring_data.apply(merge_end_date, axis=1)
 
@@ -81,8 +81,8 @@ def update_database_from_excel(file_path, db_year):
                         row["Location"],
                     ),
                 )
-                if cursor.fetchone()[0]:  # If the record does not exist
-                    cursor.execute(
+                if cursor.fetchone()[0] == 0:  # If the record does not exist
+                    cursor.execute(  # pragma: no cover
                         """INSERT OR REPLACE INTO recurring_expenses (
                             start_date, end_date, category, item, location, ori_price, currency, price_sgd
                         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -112,7 +112,7 @@ def update_database_from_excel(file_path, db_year):
 
             new_month_data = month_data.iloc[real_row_idx:]
             new_month_data.columns = month_data.iloc[real_row_idx]  # Set the new header
-            new_month_data = new_month_data[(real_row_idx + 1) :]  # noqa: E203
+            new_month_data = new_month_data.iloc[1:]
 
             for _, row in new_month_data.iterrows():
                 # Check if the record already exists
@@ -125,7 +125,7 @@ def update_database_from_excel(file_path, db_year):
                         row["Location"],
                     ),
                 )
-                if cursor.fetchone()[0] == 0:  # If the record does not exis
+                if cursor.fetchone()[0] == 0:  # If the record does not exist
                     if (
                         not (pd.isna(row["Remarks"]))
                         and row["Remarks"].split(" ")[0].isdigit()
@@ -145,7 +145,7 @@ def update_database_from_excel(file_path, db_year):
                                 date, category, item, location, price, currency, price_sgd
                             ) VALUES (?, ?, ?, ?, ?, ?, ?)""",
                         (
-                            row["Date"].iloc[0],
+                            row["Date"],
                             row["Category"],
                             row["Item"],
                             row["Location"],
