@@ -1,6 +1,6 @@
 """This module contains unit tests for the db_import module."""
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, call
 import pandas as pd
 import pytest
 from db_import.db_import import update_database_from_excel
@@ -11,14 +11,14 @@ def mock_excel_file(tmp_path):
     """Fixture to create a mock Excel file."""
     # Create data for the "Recurring" sheet
     recurring_data = {
-        "Category": ["Category", "Utilities", "Subscription"],
-        "Item": ["Item", "Electricity", "Streaming Service"],
-        "Location": ["Location", "Home", "Online"],
-        "Price": ["Price", 100, 50],
-        "Start Month": ["Start Month", "Jan", "Feb"],
-        "Start Year": ["Start Year", "2022", "2023"],
-        "End Month": ["End Month", "Mar", "Dec"],
-        "End Year": ["End Year", "2023", "2023"],
+        "Category": ["Category", "Personal", "Utilities", "Subscription"],
+        "Item": ["Item", "Piano Lessons", "Electricity", "Streaming Service"],
+        "Location": ["Location", "Music School", "Home", "Online"],
+        "Price": ["Price", 125, 100, 50],
+        "Start Month": ["Start Month", "-", "Jan", "Feb"],
+        "Start Year": ["Start Year", "-", "2022", "2023"],
+        "End Month": ["End Month", "Dec", "Mar", "-"],
+        "End Year": ["End Year", "2022", "2023", "-"],
     }
 
     # Create data for the "January" sheet
@@ -54,9 +54,60 @@ def test_update_database_from_excel_recurring(mock_connect, mock_excel_file):
     # Call the function
     update_database_from_excel(mock_excel_file, 2023)
 
+    for test_call in mock_cursor.execute.mock_calls:
+        print(test_call)
+
+    expected_calls = [
+        call(
+            """INSERT OR REPLACE INTO recurring_expenses (
+            start_date, end_date, category, item, location, ori_price, currency, price_sgd
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                "2023-01-01",  # start_date
+                None,  # end_date
+                "Personal",  # category
+                "Piano Lessons",  # item
+                "Music School",  # location
+                125,  # ori_price
+                "SGD",  # currency
+                125,  # price_sgd
+            ),
+        ),
+        call(
+            """INSERT OR REPLACE INTO recurring_expenses (
+            start_date, end_date, category, item, location, ori_price, currency, price_sgd
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                None,  # start_date
+                None,  # end_date
+                "Utilities",  # category
+                "Electricity",  # item
+                "Home",  # location
+                100,  # ori_price
+                "SGD",  # currency
+                100,  # price_sgd
+            ),
+        ),
+        call(
+            """INSERT OR REPLACE INTO recurring_expenses (
+            start_date, end_date, category, item, location, ori_price, currency, price_sgd
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                None,  # start_date
+                None,  # end_date
+                "Subscription",  # category
+                "Streaming Service",  # item
+                "Online",  # location
+                50,  # ori_price
+                "SGD",  # currency
+                50,  # price_sgd
+            ),
+        ),
+    ]
+
     # Assertions
     mock_connect.assert_called_once_with("expenses_2023.db")
-    mock_cursor.execute.assert_called()  # Ensure SQL queries were executed
+    mock_cursor.execute.assert_has_calls(expected_calls, any_order=True)
     mock_conn.commit.assert_called_once()  # Ensure changes were committed
     mock_conn.close.assert_called_once()  # Ensure the connection was closed
 
