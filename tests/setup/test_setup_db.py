@@ -56,8 +56,6 @@ def test_get_db_creates_tables(mock_connect):
                         amount REAL)"""
         ),
     ]
-    print()
-    print(expected_calls)
     mock_cursor.execute.assert_has_calls(expected_calls, any_order=True)
 
     # Verify commit is called
