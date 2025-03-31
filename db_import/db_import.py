@@ -13,8 +13,8 @@ def month_name_to_int(month_name):
         return None  # Return None if the month name is invalid
 
 
-# Merge "Start Month" and "Start Year" into "Start Date"
 def merge_start_date(row):
+    """Merge 'Start Month' and 'Start Year' into 'Start Date'."""
     try:
         if row["Start Month"] == "-":
             return "2023-01-01"  # Default to January 1, 2023 if month is missing
@@ -26,8 +26,8 @@ def merge_start_date(row):
         return None
 
 
-# Merge "End Month" and "End Year" into "End Date" (handle missing end dates)
 def merge_end_date(row):
+    """Merge "End Month" and "End Year" into "End Date" (handle missing end dates)."""
     try:
         if row["End Month"] == "-":
             return None  # Default to None if month is missing
@@ -37,6 +37,7 @@ def merge_end_date(row):
         return None
 
 
+# pylint: disable=too-many-branches, too-many-locals
 def update_database_from_excel(file_path, db_year):
     """
     Update the database with data from an Excel file.
