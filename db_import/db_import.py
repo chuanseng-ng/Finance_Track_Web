@@ -83,7 +83,7 @@ def update_database_from_excel(file_path, db_year):
                     ),
                 )
                 if cursor.fetchone()[0] == 0:  # If the record does not exist
-                    cursor.execute(  # pragma: no cover
+                    cursor.execute(
                         """INSERT OR REPLACE INTO recurring_expenses (
                             start_date, end_date, category, item, location, ori_price, currency, price_sgd
                         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
