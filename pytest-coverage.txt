@@ -4,29 +4,38 @@ cachedir: .pytest_cache
 rootdir: /home/runner/work/Finance_Track_Web/Finance_Track_Web
 configfile: pyproject.toml
 plugins: cov-6.0.0
-collecting ... collected 22 items
+collecting ... collected 31 items
 
-tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [  4%]
-tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [  9%]
-tests/routes/test_index_routes.py::test_index_success PASSED             [ 13%]
-tests/routes/test_index_routes.py::test_index_error PASSED               [ 18%]
-tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 22%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 27%]
-tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 31%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 36%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 40%]
-tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 45%]
-tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 50%]
-tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 54%]
-tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 59%]
-tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 63%]
-tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 68%]
-tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 72%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 77%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 81%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 86%]
-tests/test_main.py::test_register_blueprints_called PASSED               [ 90%]
-tests/test_main.py::test_debug_mode_enabled PASSED                       [ 95%]
+tests/db_import/test_db_import.py::test_month_name_to_int PASSED         [  3%]
+tests/db_import/test_db_import.py::test_merge_start_date PASSED          [  6%]
+tests/db_import/test_db_import.py::test_merge_end_date PASSED            [  9%]
+tests/db_import/test_db_import.py::test_update_database_from_excel_recurring PASSED [ 12%]
+tests/db_import/test_db_import.py::test_update_database_from_excel_monthly PASSED [ 16%]
+tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [ 19%]
+tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [ 22%]
+tests/routes/test_index_routes.py::test_index_success PASSED             [ 25%]
+tests/routes/test_index_routes.py::test_index_error PASSED               [ 29%]
+tests/routes/test_index_routes.py::test_upload_excel_get PASSED          [ 32%]
+tests/routes/test_index_routes.py::test_upload_excel_post_success PASSED [ 35%]
+tests/routes/test_index_routes.py::test_upload_excel_post_missing_data PASSED [ 38%]
+tests/routes/test_index_routes.py::test_upload_excel_post_exception PASSED [ 41%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 45%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 48%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 51%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 54%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 58%]
+tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 61%]
+tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 64%]
+tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 67%]
+tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 70%]
+tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 74%]
+tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 77%]
+tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 80%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 83%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 87%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 90%]
+tests/test_main.py::test_register_blueprints_called PASSED               [ 93%]
+tests/test_main.py::test_debug_mode_enabled PASSED                       [ 96%]
 tests/test_main.py::test_debug_mode_disabled PASSED                      [100%]
 
 - generated xml file: /home/runner/work/Finance_Track_Web/Finance_Track_Web/pytest.xml -
@@ -34,8 +43,8 @@ tests/test_main.py::test_debug_mode_disabled PASSED                      [100%]
 ---------- coverage: platform linux, python 3.12.9-final-0 -----------
 Name    Stmts   Miss  Cover   Missing
 -------------------------------------
-TOTAL     519      0   100%
+TOTAL     676      0   100%
 
-21 files skipped due to complete coverage.
+25 files skipped due to complete coverage.
 
-============================== 22 passed in 3.20s ==============================
+============================== 31 passed in 2.24s ==============================
