@@ -1,6 +1,9 @@
 name: Python Unit Test + Code Coverage
 
 on: 
+  push:
+    branches:
+      - code/pre_release
   pull_request: {}
 
 jobs:
