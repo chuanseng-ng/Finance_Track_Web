@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel</title>
+</head>
+<body>
+    <h1>Upload Excel File</h1>
+    <form method="POST" action="/upload_excel">
+        <label for="excel_path">Excel File Path:</label>
+        <input type="text" id="excel_path" name="excel_path" placeholder="e.g., 2024.xlsx" required>
+        <br><br>
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" placeholder="e.g., 2024" required>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <button onclick="window.location.href='/'">Back to Home</button>
+</body>
+</html>
