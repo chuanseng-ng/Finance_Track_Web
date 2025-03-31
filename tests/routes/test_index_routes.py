@@ -17,7 +17,8 @@ def client():
 
 
 @patch("routes.index_routes.get_db")
-def test_index_success(mock_get_db, client):  # pylint: disable=redefined-outer-name
+# pylint: disable=redefined-outer-name
+def test_index_success(mock_get_db, client):
     """Test successful rendering of the index page."""
     # Mock database connection and cursor
     mock_conn = MagicMock()
@@ -45,7 +46,8 @@ def test_index_success(mock_get_db, client):  # pylint: disable=redefined-outer-
 
 
 @patch("routes.index_routes.get_db")
-def test_index_error(mock_get_db, client):  # pylint: disable=redefined-outer-name
+# pylint: disable=redefined-outer-name
+def test_index_error(mock_get_db, client):
     """Test error handling when a database error occurs."""
     # Mock database connection to raise an exception
     mock_get_db.side_effect = sqlite3.DatabaseError("Mocked database error")
@@ -59,6 +61,7 @@ def test_index_error(mock_get_db, client):  # pylint: disable=redefined-outer-na
     mock_get_db.assert_called_once()
 
 
+# pylint: disable=redefined-outer-name
 def test_upload_excel_get(client):
     """Test the GET request to the /upload_excel route."""
     response = client.get("/upload_excel")
@@ -67,6 +70,7 @@ def test_upload_excel_get(client):
 
 
 @patch("routes.index_routes.update_database_from_excel")
+# pylint: disable=redefined-outer-name
 def test_upload_excel_post_success(mock_update_database, client):
     """Test the POST request to the /upload_excel route with valid data."""
     # Mock the update_database_from_excel function
@@ -85,6 +89,7 @@ def test_upload_excel_post_success(mock_update_database, client):
 
 
 @patch("routes.index_routes.update_database_from_excel")
+# pylint: disable=redefined-outer-name
 def test_upload_excel_post_missing_data(mock_update_database, client):
     """Test the POST request to the /upload_excel route with missing data."""
     # Send POST request with missing data
@@ -100,6 +105,7 @@ def test_upload_excel_post_missing_data(mock_update_database, client):
 
 
 @patch("routes.index_routes.update_database_from_excel")
+# pylint: disable=redefined-outer-name
 def test_upload_excel_post_exception(mock_update_database, client):
     """Test the POST request to the /upload_excel route when an exception occurs."""
     # Mock the update_database_from_excel function to raise an exception

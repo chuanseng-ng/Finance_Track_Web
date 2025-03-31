@@ -99,6 +99,7 @@ def mock_excel_file(tmp_path):
 
 
 @patch("db_import.db_import.sqlite3.connect")
+# pylint: disable=redefined-outer-name
 def test_update_database_from_excel_recurring(mock_connect, mock_excel_file):
     """Test updating the database with the Recurring sheet."""
     # Mock database connection and cursor
@@ -136,6 +137,7 @@ def test_update_database_from_excel_recurring(mock_connect, mock_excel_file):
 
 
 @patch("db_import.db_import.sqlite3.connect")
+# pylint: disable=redefined-outer-name
 def test_update_database_from_excel_monthly(mock_connect, mock_excel_file):
     """Test updating the database with monthly sheets."""
     # Mock database connection and cursor
