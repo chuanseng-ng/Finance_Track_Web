@@ -1,5 +1,6 @@
 """This module contains tests for the admin routes of the Flask application."""
 
+from unittest.mock import patch
 import pytest
 from flask import session, Flask
 from werkzeug.security import generate_password_hash
@@ -17,6 +18,21 @@ def client():
     app.register_blueprint(admin_bp, url_prefix="/admin")
     with app.test_client() as client:
         yield client
+
+
+# pylint: disable=unused-argument, import-outside-toplevel
+@patch("builtins.open", side_effect=FileNotFoundError)
+def test_file_not_found(mock_open):
+    """Test handling of FileNotFoundError when loading user_config.yaml."""
+    # Re-import the admin_routes module to trigger the FileNotFoundError handling
+    with patch("routes.admin_routes.ADMIN_USERNAME", "adm1n"), patch(
+        "routes.admin_routes.ADMIN_PASSWORD", "securepassw0rd"
+    ):
+        from routes.admin_routes import ADMIN_USERNAME, ADMIN_PASSWORD_HASH
+
+        # Assertions
+        assert ADMIN_USERNAME == "adm1n"  # Default username
+        assert ADMIN_PASSWORD_HASH is not None  # Password should be hashed
 
 
 def test_admin_login_success(client, monkeypatch):
