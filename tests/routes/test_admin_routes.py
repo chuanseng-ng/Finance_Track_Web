@@ -54,7 +54,8 @@ def test_admin_login_success(client, monkeypatch):
     # Assertions
     assert response.status_code == 200
     assert b"Admin Dashboard" in response.data
-    assert session.get("admin_logged_in") is True
+    with client.session_transaction() as sess:
+        assert sess.get("admin_logged_in") is True
 
 
 def test_admin_login_failure(client, monkeypatch):
