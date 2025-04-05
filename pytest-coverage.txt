@@ -4,192 +4,56 @@ cachedir: .pytest_cache
 rootdir: /home/runner/work/Finance_Track_Web/Finance_Track_Web
 configfile: pyproject.toml
 plugins: cov-6.0.0
-collecting ... collected 31 items
+collecting ... collected 38 items
 
-tests/db_import/test_db_import.py::test_month_name_to_int PASSED         [  3%]
-tests/db_import/test_db_import.py::test_merge_start_date PASSED          [  6%]
-tests/db_import/test_db_import.py::test_merge_end_date PASSED            [  9%]
-tests/db_import/test_db_import.py::test_update_database_from_excel_recurring PASSED [ 12%]
-tests/db_import/test_db_import.py::test_update_database_from_excel_monthly PASSED [ 16%]
-tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [ 19%]
-tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [ 22%]
-tests/routes/test_index_routes.py::test_index_success FAILED             [ 25%]
-tests/routes/test_index_routes.py::test_index_error PASSED               [ 29%]
-tests/routes/test_index_routes.py::test_upload_excel_get PASSED          [ 32%]
-tests/routes/test_index_routes.py::test_upload_excel_post_success FAILED [ 35%]
-tests/routes/test_index_routes.py::test_upload_excel_post_missing_data PASSED [ 38%]
-tests/routes/test_index_routes.py::test_upload_excel_post_exception PASSED [ 41%]
-tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 45%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 48%]
-tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 51%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 54%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 58%]
-tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 61%]
-tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 64%]
-tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 67%]
-tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 70%]
-tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 74%]
-tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 77%]
-tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 80%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 83%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 87%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 90%]
-tests/test_main.py::test_register_blueprints_called PASSED               [ 93%]
-tests/test_main.py::test_debug_mode_enabled PASSED                       [ 96%]
-tests/test_main.py::test_debug_mode_disabled PASSED                      [100%]
+tests/db_import/test_db_import.py::test_month_name_to_int PASSED         [  2%]
+tests/db_import/test_db_import.py::test_merge_start_date PASSED          [  5%]
+tests/db_import/test_db_import.py::test_merge_end_date PASSED            [  7%]
+tests/db_import/test_db_import.py::test_update_database_from_excel_recurring PASSED [ 10%]
+tests/db_import/test_db_import.py::test_update_database_from_excel_monthly PASSED [ 13%]
+tests/routes/test_admin_routes.py::test_file_not_found PASSED            [ 15%]
+tests/routes/test_admin_routes.py::test_admin_login_success PASSED       [ 18%]
+tests/routes/test_admin_routes.py::test_admin_login_failure PASSED       [ 21%]
+tests/routes/test_admin_routes.py::test_admin_logout PASSED              [ 23%]
+tests/routes/test_admin_routes.py::test_admin_dashboard_access PASSED    [ 26%]
+tests/routes/test_admin_routes.py::test_admin_dashboard_redirect PASSED  [ 28%]
+tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [ 31%]
+tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [ 34%]
+tests/routes/test_index_routes.py::test_index_success PASSED             [ 36%]
+tests/routes/test_index_routes.py::test_index_error PASSED               [ 39%]
+tests/routes/test_index_routes.py::test_upload_excel_get PASSED          [ 42%]
+tests/routes/test_index_routes.py::test_upload_excel_post_success PASSED [ 44%]
+tests/routes/test_index_routes.py::test_upload_excel_post_missing_data PASSED [ 47%]
+tests/routes/test_index_routes.py::test_upload_excel_post_exception PASSED [ 50%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 52%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 55%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 57%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 60%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 63%]
+tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 65%]
+tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 68%]
+tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 71%]
+tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 73%]
+tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 76%]
+tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 78%]
+tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 81%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 84%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 86%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 89%]
+tests/test_main.py::test_register_blueprints_called PASSED               [ 92%]
+tests/test_main.py::test_debug_mode_enabled PASSED                       [ 94%]
+tests/test_main.py::test_debug_mode_disabled PASSED                      [ 97%]
+tests/test_main.py::test_app_secret_key PASSED                           [100%]
 
-=================================== FAILURES ===================================
-______________________________ test_index_success ______________________________
-
-mock_get_db = <MagicMock name='get_db' id='139679078027424'>
-client = <FlaskClient <Flask 'tests.routes.test_index_routes'>>
-
-    @patch("routes.index_routes.get_db")
-    # pylint: disable=redefined-outer-name
-    def test_index_success(mock_get_db, client):
-        """Test successful rendering of the index page."""
-        # Mock database connection and cursor
-        mock_conn = MagicMock()
-        mock_cursor = MagicMock()
-        mock_get_db.return_value = mock_conn
-        mock_conn.cursor.return_value = mock_cursor
-    
-        # Mock database queries
-        mock_cursor.fetchone.side_effect = [
-            (100.0,),  # Monthly spending
-            (50.0,),  # Recurring expenses
-            (200.0,),  # Monthly salary
-        ]
-    
-        # Send GET request
-        response = client.get("/")
-    
-        # Assertions
->       assert response.status_code == 200
-E       assert 500 == 200
-E        +  where 500 = <WrapperTestResponse streamed [500 INTERNAL SERVER ERROR]>.status_code
-
-tests/routes/test_index_routes.py:40: AssertionError
------------------------------- Captured log call -------------------------------
-ERROR    tests.routes.test_index_routes:app.py:875 Exception on / [GET]
-Traceback (most recent call last):
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Finance_Track_Web/Finance_Track_Web/routes/index_routes.py", line 67, in index
-    return render_template(
-           ^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
-    return _render(app, template, context)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
-    rv = template.render(context)
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/usr/share/miniconda/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/runner/work/Finance_Track_Web/Finance_Track_Web/templates/index.html", line 11, in top-level template code
-    <a href="{{ url_for('admin.login') }}">Admin</a> <!-- Admin Button -->
-    ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 1121, in url_for
-    return self.handle_url_build_error(error, endpoint, values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 1110, in url_for
-    rv = url_adapter.build(  # type: ignore[union-attr]
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/werkzeug/routing/map.py", line 924, in build
-    raise BuildError(endpoint, values, method, self)
-werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin.login'. Did you mean 'index.index' instead?
-________________________ test_upload_excel_post_success ________________________
-
-mock_update_database = <MagicMock name='update_database_from_excel' id='139679076966208'>
-client = <FlaskClient <Flask 'tests.routes.test_index_routes'>>
-
-    @patch("routes.index_routes.update_database_from_excel")
-    # pylint: disable=redefined-outer-name
-    def test_upload_excel_post_success(mock_update_database, client):
-        """Test the POST request to the /upload_excel route with valid data."""
-        # Mock the update_database_from_excel function
-        mock_update_database.return_value = None
-    
-        # Send POST request with valid data
-        response = client.post(
-            "/upload_excel",
-            data={"excel_path": "mock_file.xlsx", "year": "2023"},
-            follow_redirects=True,
-        )
-    
-        # Assertions
->       assert response.status_code == 200
-E       assert 500 == 200
-E        +  where 500 = <WrapperTestResponse streamed [500 INTERNAL SERVER ERROR]>.status_code
-
-tests/routes/test_index_routes.py:87: AssertionError
------------------------------- Captured log call -------------------------------
-ERROR    tests.routes.test_index_routes:app.py:875 Exception on / [GET]
-Traceback (most recent call last):
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/Finance_Track_Web/Finance_Track_Web/routes/index_routes.py", line 67, in index
-    return render_template(
-           ^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
-    return _render(app, template, context)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
-    rv = template.render(context)
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/usr/share/miniconda/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/runner/work/Finance_Track_Web/Finance_Track_Web/templates/index.html", line 11, in top-level template code
-    <a href="{{ url_for('admin.login') }}">Admin</a> <!-- Admin Button -->
-    ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 1121, in url_for
-    return self.handle_url_build_error(error, endpoint, values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/flask/app.py", line 1110, in url_for
-    rv = url_adapter.build(  # type: ignore[union-attr]
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/share/miniconda/lib/python3.12/site-packages/werkzeug/routing/map.py", line 924, in build
-    raise BuildError(endpoint, values, method, self)
-werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin.login'. Did you mean 'index.index' instead?
 - generated xml file: /home/runner/work/Finance_Track_Web/Finance_Track_Web/pytest.xml -
 
 ---------- coverage: platform linux, python 3.12.9-final-0 -----------
-Name                                Stmts   Miss  Cover   Missing
------------------------------------------------------------------
-routes/admin_routes.py                 37     19    49%   20-22, 31-45, 51-53, 59-63
-tests/routes/test_index_routes.py      52      4    92%   41-45, 88
------------------------------------------------------------------
-TOTAL                                 716     23    97%
+Name                     Stmts   Miss  Cover   Missing
+------------------------------------------------------
+routes/admin_routes.py      37      3    92%   20-22
+------------------------------------------------------
+TOTAL                      777      3    99%
 
-24 files skipped due to complete coverage.
+26 files skipped due to complete coverage.
 
-=========================== short test summary info ============================
-FAILED tests/routes/test_index_routes.py::test_index_success - assert 500 == 200
- +  where 500 = <WrapperTestResponse streamed [500 INTERNAL SERVER ERROR]>.status_code
-FAILED tests/routes/test_index_routes.py::test_upload_excel_post_success - assert 500 == 200
- +  where 500 = <WrapperTestResponse streamed [500 INTERNAL SERVER ERROR]>.status_code
-========================= 2 failed, 29 passed in 2.54s =========================
+============================== 38 passed in 2.65s ==============================
