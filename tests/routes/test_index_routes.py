@@ -5,13 +5,18 @@ from unittest.mock import patch, MagicMock
 import pytest
 from flask import Flask
 from routes.index_routes import index_bp
+from routes.admin_routes import admin_bp  # Import the admin blueprint
 
 
 @pytest.fixture
 def client():
     """Fixture to create a Flask test client."""
     app = Flask(__name__, template_folder="../../templates")
+    app.secret_key = "test_secret_key"
     app.register_blueprint(index_bp)
+    app.register_blueprint(
+        admin_bp, url_prefix="/admin"
+    )  # Register the admin blueprint
     with app.test_client() as client:  # pylint: disable=redefined-outer-name
         yield client
 
