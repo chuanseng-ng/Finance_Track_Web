@@ -17,9 +17,9 @@ try:
         ADMIN_PASSWORD = config.get(
             "admin_password", "securepassw0rd"
         )  # Default to "securepassword"
-except FileNotFoundError:
-    ADMIN_USERNAME = "adm1n"
-    ADMIN_PASSWORD = "securepassw0rd"
+except FileNotFoundError:  # pragma: no cover
+    ADMIN_USERNAME = "adm2n"
+    ADMIN_PASSWORD = "securepassw1rd"
 
 # Hash the admin password
 ADMIN_PASSWORD_HASH = generate_password_hash(ADMIN_PASSWORD)
