@@ -29,3 +29,13 @@ def test_debug_mode_disabled(mock_getenv):
     mock_getenv.return_value = "False"
     debug_mode = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
     assert debug_mode is False
+
+
+def test_app_secret_key():
+    """Test that the Flask app's secret key is set correctly."""
+    app = create_app()
+
+    # Ensure the secret key is set and is not empty
+    assert app.secret_key is not None
+    assert isinstance(app.secret_key, bytes)  # os.urandom generates a bytes object
+    assert len(app.secret_key) > 0
