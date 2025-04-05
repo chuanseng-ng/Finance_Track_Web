@@ -48,12 +48,10 @@ tests/test_main.py::test_app_secret_key PASSED                           [100%]
 - generated xml file: /home/runner/work/Finance_Track_Web/Finance_Track_Web/pytest.xml -
 
 ---------- coverage: platform linux, python 3.12.9-final-0 -----------
-Name                     Stmts   Miss  Cover   Missing
-------------------------------------------------------
-routes/admin_routes.py      37      3    92%   20-22
-------------------------------------------------------
-TOTAL                      777      3    99%
+Name    Stmts   Miss  Cover   Missing
+-------------------------------------
+TOTAL     774      0   100%
 
-26 files skipped due to complete coverage.
+27 files skipped due to complete coverage.
 
-============================== 38 passed in 2.65s ==============================
+============================== 38 passed in 2.79s ==============================
