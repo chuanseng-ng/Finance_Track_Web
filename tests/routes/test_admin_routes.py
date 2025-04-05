@@ -25,13 +25,13 @@ def client():
 def test_file_not_found(mock_open):
     """Test handling of FileNotFoundError when loading user_config.yaml."""
     # Re-import the admin_routes module to trigger the FileNotFoundError handling
-    with patch("routes.admin_routes.ADMIN_USERNAME", "adm1n"), patch(
-        "routes.admin_routes.ADMIN_PASSWORD", "securepassw0rd"
+    with patch("routes.admin_routes.ADMIN_USERNAME", "adm2n"), patch(
+        "routes.admin_routes.ADMIN_PASSWORD", "securepassw1rd"
     ):
         from routes.admin_routes import ADMIN_USERNAME, ADMIN_PASSWORD_HASH
 
         # Assertions
-        assert ADMIN_USERNAME == "adm1n"  # Default username
+        assert ADMIN_USERNAME == "adm2n"  # Default username
         assert ADMIN_PASSWORD_HASH is not None  # Password should be hashed
 
 
