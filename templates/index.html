@@ -6,6 +6,11 @@
     <title>Expense Tracker</title>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="{{ url_for('admin.login') }}">Admin</a> <!-- Admin Button -->
+        </nav>
+    </header>
     <h1>Personal Web-based Expense Tracker</h1>
     <h2>Current Month's Spending: SGD {{ monthly_spending }}</h2>
     <h2>Current Month's Balance: SGD {{monthly_balance}}</h2>

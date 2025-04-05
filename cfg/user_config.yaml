@@ -5,3 +5,7 @@ api_key: ""
 
 # Define error_bypass enable/disable
 error_bypass: True
+
+# Admin username and password for the application
+admin_username: ""
+admin_password: ""

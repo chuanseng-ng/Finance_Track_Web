@@ -8,7 +8,7 @@
 ## Code Coverage
 <!-- markdownlint-disable MD033 -->
 <!-- Pytest Coverage Comment:Begin -->
-<a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-100%25-brightgreen.svg" /></a><details><summary>Coverage Report </summary><table><tr><th>File</th><th>Stmts</th><th>Miss</th><th>Cover</th></tr><tbody><tr><td><b>TOTAL</b></td><td><b>676</b></td><td><b>0</b></td><td><b>100%</b></td></tr></tbody></table></details>
+<a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-100%25-brightgreen.svg" /></a><details><summary>Coverage Report </summary><table><tr><th>File</th><th>Stmts</th><th>Miss</th><th>Cover</th></tr><tbody><tr><td><b>TOTAL</b></td><td><b>776</b></td><td><b>0</b></td><td><b>100%</b></td></tr></tbody></table></details>
 <!-- Pytest Coverage Comment:End -->
 
 ## Introduction
@@ -34,6 +34,7 @@
 - Quality of Life (QoL) items
   - (Done) Add support to skip currency conversion if API key does not exists in user_config.yaml
   - (Done) Legacy database import (Specific format in Excel)
+  - (Done) Admin page for direct database modification
 
 ## Version Control
 
@@ -41,6 +42,7 @@ Note:  Only keep latest 5 version histories
 
 | Version | Description | Changes |
 | :-----: | :---------: | :-----: |
+| V3.1 | Admin page addition | Add admin login page for database modification |
 | V3.0 | Legacy excel database import support | Add support for legacy database import merge with current |
 | V2.1 | Custom time period expenses graph plot | Add support for custom time period expense plot |
 | V2.0 | Monthly/yearly expenses graph plot | Add support for current month/year expense plot |
