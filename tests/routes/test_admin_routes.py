@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 import pytest
-from flask import session, Flask
+from flask import Flask
 from werkzeug.security import generate_password_hash
 from routes.index_routes import index_bp
 from routes.admin_routes import admin_bp
@@ -78,7 +78,8 @@ def test_admin_login_failure(client, monkeypatch):
     # Assertions
     assert response.status_code == 200
     assert b"Invalid username or password." in response.data
-    assert session.get("admin_logged_in") is None
+    with client.session_transaction() as sess:
+        assert sess.get("admin_logged_in") is None
 
 
 def test_admin_logout(client):
@@ -93,7 +94,8 @@ def test_admin_logout(client):
     # Assertions
     assert response.status_code == 200
     assert b"Logged out successfully." in response.data
-    assert session.get("admin_logged_in") is None
+    with client.session_transaction() as sess:
+        assert sess.get("admin_logged_in") is None
 
 
 def test_admin_dashboard_access(client):
