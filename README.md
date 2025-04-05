@@ -34,6 +34,7 @@
 - Quality of Life (QoL) items
   - (Done) Add support to skip currency conversion if API key does not exists in user_config.yaml
   - (Done) Legacy database import (Specific format in Excel)
+  - (Done) Admin page for direct database modification
 
 ## Version Control
 
@@ -41,6 +42,7 @@ Note:  Only keep latest 5 version histories
 
 | Version | Description | Changes |
 | :-----: | :---------: | :-----: |
+| V3.1 | Admin page addition | Add admin login page for database modification |
 | V3.0 | Legacy excel database import support | Add support for legacy database import merge with current |
 | V2.1 | Custom time period expenses graph plot | Add support for custom time period expense plot |
 | V2.0 | Monthly/yearly expenses graph plot | Add support for current month/year expense plot |
