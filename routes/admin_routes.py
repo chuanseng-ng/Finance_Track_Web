@@ -86,15 +86,19 @@ def edit_table():  # pylint: disable=too-many-return-statements
             value = request.form.get("value")
 
             # Validate the column name against a predefined list of allowed columns
-            allowed_expenses_columns = ["id", "date", "category", "item", "location"]
+            allowed_expenses_columns = {
+                "id": "id",
+                "date": "date",
+                "category": "category",
+                "item": "item",
+                "location": "location",
+            }
             if column not in allowed_expenses_columns:
                 return jsonify({"success": False, "error": "Invalid column name."}), 400
 
             try:
-                cursor.execute(
-                    f"UPDATE expenses SET {column} = %s WHERE id = %s",
-                    (value, record_id),
-                )
+                sql_query = f"UPDATE expenses SET {allowed_expenses_columns[column]} = ? WHERE id = ?"
+                cursor.execute(sql_query, (value, record_id))
                 conn.commit()
                 return jsonify({"success": True})
             except sqlite3.Error as e:
