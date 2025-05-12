@@ -8,6 +8,12 @@
 <body>
     <h1>Admin Dashboard</h1>
     <p>Welcome to the admin dashboard!</p>
+
+    <!-- Button to redirect to the Edit Table page -->
+    <a href="{{ url_for('admin.edit_table') }}" class="btn">Go to Edit Table</a>
+    <br><br>
+
+    <!-- Logout button -->
     <a href="{{ url_for('admin.logout') }}">Logout</a>
 </body>
 </html>
