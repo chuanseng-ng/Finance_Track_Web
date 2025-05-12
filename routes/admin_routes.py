@@ -84,6 +84,11 @@ def edit_table():
             column = request.form.get("column")
             value = request.form.get("value")
 
+            # Validate the column name against a predefined list of allowed columns
+            allowed_columns = ["name", "amount", "date"]  # Example allowed columns
+            if column not in allowed_columns:
+                return jsonify({"success": False, "error": "Invalid column name."}), 400
+
             try:
                 cursor.execute(
                     f"UPDATE expenses SET {column} = ? WHERE id = ?",
