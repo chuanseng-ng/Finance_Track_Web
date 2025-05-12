@@ -184,7 +184,7 @@ def test_edit_table_post_success(mock_connect, client):
     # Remove assertion as post success will not return any special response
     # assert b'"success": true' in response.data
     mock_cursor.execute.assert_called_once_with(
-        "UPDATE expenses SET item = %s WHERE id = %s", ("Updated Data", "1")
+        "UPDATE expenses SET item = ? WHERE id = ?", ("Updated Data", "1")
     )
 
 
@@ -245,7 +245,7 @@ def test_edit_table_post_sqlite_error(mock_connect, client):
 
     # Ensure the UPDATE query was attempted
     mock_cursor.execute.assert_called_once_with(
-        "UPDATE expenses SET item = %s WHERE id = %s", ("Invalid Data", "1")
+        "UPDATE expenses SET item = ? WHERE id = ?", ("Invalid Data", "1")
     )
 
 
