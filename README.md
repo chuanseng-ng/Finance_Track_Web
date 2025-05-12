@@ -8,7 +8,7 @@
 ## Code Coverage
 <!-- markdownlint-disable MD033 -->
 <!-- Pytest Coverage Comment:Begin -->
-<a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-99%25-brightgreen.svg" /></a><details><summary>Coverage Report </summary><table><tr><th>File</th><th>Stmts</th><th>Miss</th><th>Cover</th><th>Missing</th></tr><tbody><tr><td colspan="5"><b>routes</b></td></tr><tr><td>&nbsp; &nbsp;<a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/routes/admin_routes.py">admin_routes.py</a></td><td>66</td><td>10</td><td>85%</td><td><a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/routes/admin_routes.py#L25-L27">25&ndash;27</a>, <a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/routes/admin_routes.py#L49-L51">49&ndash;51</a>, <a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/routes/admin_routes.py#L62-L63">62&ndash;63</a>, <a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/routes/admin_routes.py#L94-L95">94&ndash;95</a></td></tr><tr><td colspan="5"><b>tests/routes</b></td></tr><tr><td>&nbsp; &nbsp;<a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/tests/routes/test_admin_routes.py">test_admin_routes.py</a></td><td>103</td><td>1</td><td>99%</td><td><a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/tests/routes/test_admin_routes.py#L49">49</a></td></tr><tr><td><b>TOTAL</b></td><td><b>856</b></td><td><b>11</b></td><td><b>99%</b></td><td>&nbsp;</td></tr></tbody></table></details>
+<a href="https://github.com/chuanseng-ng/Finance_Track_Web/blob/code/pre_release/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-100%25-brightgreen.svg" /></a><details><summary>Coverage Report </summary><table><tr><th>File</th><th>Stmts</th><th>Miss</th><th>Cover</th></tr><tbody><tr><td><b>TOTAL</b></td><td><b>876</b></td><td><b>0</b></td><td><b>100%</b></td></tr></tbody></table></details>
 <!-- Pytest Coverage Comment:End -->
 
 ## Introduction
@@ -35,6 +35,7 @@
   - (Done) Add support to skip currency conversion if API key does not exists in user_config.yaml
   - (Done) Legacy database import (Specific format in Excel)
   - (Done) Admin page for direct database modification
+    - With pre-filters based on database year + date range
 
 ## Version Control
 

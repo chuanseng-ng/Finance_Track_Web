@@ -37,16 +37,24 @@ def test_file_not_found(mock_open):
 
 
 def test_login_success(client, monkeypatch):
-    """Test successful admin login."""
+    """Test successful admin login with default ADMIN_USERNAME and ADMIN_PASSWORD."""
+    # Mock the default admin credentials
     monkeypatch.setattr("routes.admin_routes.ADMIN_USERNAME", "adm1n")
-    monkeypatch.setattr("routes.admin_routes.ADMIN_PASSWORD", "str0ngpassw0rd")
+    monkeypatch.setattr("routes.admin_routes.ADMIN_PASSWORD", "")
 
+    # Mock the password hash check to return True
     with patch("werkzeug.security.check_password_hash", return_value=True):
         response = client.post(
-            "/admin/login", data={"username": "adm1n", "password": "str0ngpassw0rd"}
+            "/admin/login", data={"username": "adm1n", "password": ""}
         )
+
+        # Assert that the response redirects to the dashboard
         assert response.status_code == 302
-        assert session.get("admin_logged_in") is True
+        assert response.location.endswith("/admin/dashboard")
+
+        # Assert that the session is updated to reflect a logged-in admin
+        with client.session_transaction() as sess:
+            assert sess.get("admin_logged_in") is True
 
 
 def test_login_failure(client, monkeypatch):

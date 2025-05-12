@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 admin_bp = Blueprint("admin", __name__)
 
 # Load admin credentials from user_config.yaml
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../cfg/user_config_copy.yaml")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../cfg/user_config.yaml")
 
 try:
     with open(CONFIG_PATH, "r", encoding="utf-8") as config_file:
@@ -84,6 +84,11 @@ def edit_table():
             column = request.form.get("column")
             value = request.form.get("value")
 
+            # Validate the column name against a predefined list of allowed columns
+            allowed_columns = ["name", "amount", "date"]  # Example allowed columns
+            if column not in allowed_columns:
+                return jsonify({"success": False, "error": "Invalid column name."}), 400
+
             try:
                 cursor.execute(
                     f"UPDATE expenses SET {column} = ? WHERE id = ?",
@@ -92,7 +97,8 @@ def edit_table():
                 conn.commit()
                 return jsonify({"success": True})
             except sqlite3.Error as e:
-                return jsonify({"success": False, "error": str(e)})
+                app.logger.error(f"Database error: {str(e)}")
+                return jsonify({"success": False, "error": "An internal error occurred."})
 
         # Fetch data for the table based on the date range
         cursor.execute(
