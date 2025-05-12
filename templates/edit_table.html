@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Table</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    <h1>Edit Table for Year {{ year }}</h1>
+    <p>Showing records from {{ start_date }} to {{ end_date }}</p>
+    <table id="editableTable" class="display">
+        <thead>
+            <tr>
+                {% for column in columns %}
+                <th>{{ column }}</th>
+                {% endfor %}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for cell in row %}
+                <td contenteditable="true" data-id="{{ row[0] }}" data-column="{{ columns[loop.index0] }}">{{ cell }}</td>
+                {% endfor %}
+                <td>
+                    <button class="save-btn" data-id="{{ row[0] }}">Save</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#editableTable').DataTable({
+                "pageLength": 25, // Set the number of rows per page
+                "lengthMenu": [25, 50, 75, 100], // Set the options for the number of rows per page
+            });
+
+            $('.save-btn').on('click', function () {
+                const rowId = $(this).data('id');
+                const row = $(this).closest('tr');
+                const updates = [];
+
+                row.find('td[contenteditable="true"]').each(function () {
+                    const column = $(this).data('column');
+                    const value = $(this).text();
+                    updates.push({ column, value });
+                });
+
+                updates.forEach(update => {
+                    $.post('/admin/edit_table', {
+                        id: rowId,
+                        column: update.column,
+                        value: update.value
+                    }, function (response) {
+                        if (response.success) {
+                            alert('Update successful!');
+                        } else {
+                            alert('Error: ' + response.error);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
