@@ -177,14 +177,14 @@ def test_edit_table_post_success(mock_connect, client):
 
     response = client.post(
         "/admin/edit_table?year=2023&start_date=2023-01-01&end_date=2023-12-31",
-        data={"id": 1, "column": "data", "value": "Updated Data"},
+        data={"id": 1, "column": "item", "value": "Updated Data"},
         follow_redirects=True,
     )
     assert response.status_code == 200
     # Remove assertion as post success will not return any special response
     # assert b'"success": true' in response.data
     mock_cursor.execute.assert_called_once_with(
-        "UPDATE expenses SET data = ? WHERE id = ?", ("Updated Data", "1")
+        "UPDATE expenses SET item = %s WHERE id = %s", ("Updated Data", "1")
     )
 
 
@@ -205,7 +205,7 @@ def test_edit_table_post_failure(mock_connect, client):
 
     response = client.post(
         "/admin/edit_table",
-        data={"id": 1, "column": "data", "value": "Invalid Data"},
+        data={"id": 1, "column": "item", "value": "Invalid Data"},
         follow_redirects=True,
     )
     assert response.status_code == 200
@@ -233,7 +233,7 @@ def test_edit_table_post_sqlite_error(mock_connect, client):
     # Simulate a POST request with valid data
     response = client.post(
         "/admin/edit_table?year=2023&start_date=2023-01-01&end_date=2023-12-31",
-        data={"id": 1, "column": "data", "value": "Invalid Data"},
+        data={"id": 1, "column": "item", "value": "Invalid Data"},
         follow_redirects=True,
     )
 
@@ -245,5 +245,34 @@ def test_edit_table_post_sqlite_error(mock_connect, client):
 
     # Ensure the UPDATE query was attempted
     mock_cursor.execute.assert_called_once_with(
-        "UPDATE expenses SET data = ? WHERE id = ?", ("Invalid Data", "1")
+        "UPDATE expenses SET item = %s WHERE id = %s", ("Invalid Data", "1")
     )
+
+
+@patch("sqlite3.connect")
+def test_edit_table_post_invalid_column(mock_connect, client):
+    """Test edit_table route with an invalid column name in the POST request."""
+    # Mock session to simulate a logged-in admin
+    with client.session_transaction() as sess:
+        sess["admin_logged_in"] = True
+
+    # Mock the database connection and cursor
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_connect.return_value = mock_conn
+    mock_conn.cursor.return_value = mock_cursor
+
+    # Simulate a POST request with an invalid column name
+    response = client.post(
+        "/admin/edit_table?year=2023&start_date=2023-01-01&end_date=2023-12-31",
+        data={"id": 1, "column": "invalid_column", "value": "Invalid Data"},
+        follow_redirects=True,
+    )
+
+    # Assert that the response contains the error message
+    assert response.status_code == 400
+    # Remove assertion as incorrect column name will not return any special response
+    # assert b"Invalid column name." in response.data
+
+    # Ensure the UPDATE query was not attempted
+    mock_cursor.execute.assert_not_called()

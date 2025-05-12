@@ -12,6 +12,7 @@ from flask import (
     session,
     flash,
     jsonify,
+    current_app,
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -56,7 +57,7 @@ def login():
 
 
 @admin_bp.route("/edit_table", methods=["GET", "POST"])
-def edit_table():
+def edit_table():  # pylint: disable=too-many-return-statements
     """Display and edit the SQL database as a table based on a date range."""
     if not session.get("admin_logged_in"):
         flash("Please log in to access the admin dashboard.", "warning")
@@ -85,20 +86,22 @@ def edit_table():
             value = request.form.get("value")
 
             # Validate the column name against a predefined list of allowed columns
-            allowed_columns = ["name", "amount", "date"]  # Example allowed columns
-            if column not in allowed_columns:
+            allowed_expenses_columns = ["id", "date", "category", "item", "location"]
+            if column not in allowed_expenses_columns:
                 return jsonify({"success": False, "error": "Invalid column name."}), 400
 
             try:
                 cursor.execute(
-                    f"UPDATE expenses SET {column} = ? WHERE id = ?",
+                    f"UPDATE expenses SET {column} = %s WHERE id = %s",
                     (value, record_id),
                 )
                 conn.commit()
                 return jsonify({"success": True})
             except sqlite3.Error as e:
-                app.logger.error(f"Database error: {str(e)}")
-                return jsonify({"success": False, "error": "An internal error occurred."})
+                current_app.logger.error(f"Database error: {str(e)}")
+                return jsonify(
+                    {"success": False, "error": "An internal error occurred."}
+                )
 
         # Fetch data for the table based on the date range
         cursor.execute(
