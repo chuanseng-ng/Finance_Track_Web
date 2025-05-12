@@ -1,57 +1,88 @@
 ============================= test session starts ==============================
-platform linux -- Python 3.12.9, pytest-8.3.4, pluggy-1.5.0 -- /usr/share/miniconda/bin/python
+platform linux -- Python 3.13.2, pytest-8.3.4, pluggy-1.5.0 -- /usr/share/miniconda/bin/python
 cachedir: .pytest_cache
 rootdir: /home/runner/work/Finance_Track_Web/Finance_Track_Web
 configfile: pyproject.toml
 plugins: cov-6.0.0
-collecting ... collected 38 items
+collecting ... collected 43 items
 
 tests/db_import/test_db_import.py::test_month_name_to_int PASSED         [  2%]
-tests/db_import/test_db_import.py::test_merge_start_date PASSED          [  5%]
-tests/db_import/test_db_import.py::test_merge_end_date PASSED            [  7%]
-tests/db_import/test_db_import.py::test_update_database_from_excel_recurring PASSED [ 10%]
-tests/db_import/test_db_import.py::test_update_database_from_excel_monthly PASSED [ 13%]
-tests/routes/test_admin_routes.py::test_file_not_found PASSED            [ 15%]
-tests/routes/test_admin_routes.py::test_admin_login_success PASSED       [ 18%]
-tests/routes/test_admin_routes.py::test_admin_login_failure PASSED       [ 21%]
-tests/routes/test_admin_routes.py::test_admin_logout PASSED              [ 23%]
-tests/routes/test_admin_routes.py::test_admin_dashboard_access PASSED    [ 26%]
-tests/routes/test_admin_routes.py::test_admin_dashboard_redirect PASSED  [ 28%]
-tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [ 31%]
-tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [ 34%]
-tests/routes/test_index_routes.py::test_index_success PASSED             [ 36%]
-tests/routes/test_index_routes.py::test_index_error PASSED               [ 39%]
-tests/routes/test_index_routes.py::test_upload_excel_get PASSED          [ 42%]
-tests/routes/test_index_routes.py::test_upload_excel_post_success PASSED [ 44%]
-tests/routes/test_index_routes.py::test_upload_excel_post_missing_data PASSED [ 47%]
-tests/routes/test_index_routes.py::test_upload_excel_post_exception PASSED [ 50%]
-tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 52%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 55%]
-tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 57%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 60%]
-tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 63%]
-tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 65%]
-tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 68%]
-tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 71%]
-tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 73%]
-tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 76%]
-tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 78%]
-tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 81%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 84%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 86%]
-tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 89%]
-tests/test_main.py::test_register_blueprints_called PASSED               [ 92%]
-tests/test_main.py::test_debug_mode_enabled PASSED                       [ 94%]
+tests/db_import/test_db_import.py::test_merge_start_date PASSED          [  4%]
+tests/db_import/test_db_import.py::test_merge_end_date PASSED            [  6%]
+tests/db_import/test_db_import.py::test_update_database_from_excel_recurring PASSED [  9%]
+tests/db_import/test_db_import.py::test_update_database_from_excel_monthly PASSED [ 11%]
+tests/routes/test_admin_routes.py::test_file_not_found PASSED            [ 13%]
+tests/routes/test_admin_routes.py::test_login_success FAILED             [ 16%]
+tests/routes/test_admin_routes.py::test_login_failure PASSED             [ 18%]
+tests/routes/test_admin_routes.py::test_logout PASSED                    [ 20%]
+tests/routes/test_admin_routes.py::test_dashboard_access PASSED          [ 23%]
+tests/routes/test_admin_routes.py::test_dashboard_redirect PASSED        [ 25%]
+tests/routes/test_admin_routes.py::test_edit_table_missing_params PASSED [ 27%]
+tests/routes/test_admin_routes.py::test_edit_table_db_error PASSED       [ 30%]
+tests/routes/test_admin_routes.py::test_edit_table_get_success PASSED    [ 32%]
+tests/routes/test_admin_routes.py::test_edit_table_post_success PASSED   [ 34%]
+tests/routes/test_admin_routes.py::test_edit_table_post_failure PASSED   [ 37%]
+tests/routes/test_expense_routes.py::test_add_expense_success PASSED     [ 39%]
+tests/routes/test_expense_routes.py::test_add_expense_error PASSED       [ 41%]
+tests/routes/test_index_routes.py::test_index_success PASSED             [ 44%]
+tests/routes/test_index_routes.py::test_index_error PASSED               [ 46%]
+tests/routes/test_index_routes.py::test_upload_excel_get PASSED          [ 48%]
+tests/routes/test_index_routes.py::test_upload_excel_post_success PASSED [ 51%]
+tests/routes/test_index_routes.py::test_upload_excel_post_missing_data PASSED [ 53%]
+tests/routes/test_index_routes.py::test_upload_excel_post_exception PASSED [ 55%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_success PASSED   [ 58%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_success PASSED [ 60%]
+tests/routes/test_plot_routes.py::test_plot_expenditure_error PASSED     [ 62%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_missing_params PASSED [ 65%]
+tests/routes/test_plot_routes.py::test_plot_custom_expenditure_error PASSED [ 67%]
+tests/routes/test_recurring_routes.py::test_add_recurring_success PASSED [ 69%]
+tests/routes/test_recurring_routes.py::test_add_recurring_error PASSED   [ 72%]
+tests/routes/test_recurring_routes.py::test_add_recurring_missing_end_date PASSED [ 74%]
+tests/routes/test_salary_routes.py::test_add_salary_success PASSED       [ 76%]
+tests/routes/test_salary_routes.py::test_add_salary_with_previous_entry PASSED [ 79%]
+tests/routes/test_salary_routes.py::test_add_salary_error PASSED         [ 81%]
+tests/setup/test_setup_db.py::test_get_db_creates_tables PASSED          [ 83%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_valid_api_key PASSED  [ 86%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_error_bypass PASSED [ 88%]
+tests/setup/test_setup_stg.py::test_cfg_setup_with_missing_api_key_and_no_error_bypass PASSED [ 90%]
+tests/test_main.py::test_register_blueprints_called PASSED               [ 93%]
+tests/test_main.py::test_debug_mode_enabled PASSED                       [ 95%]
 tests/test_main.py::test_debug_mode_disabled PASSED                      [ 97%]
 tests/test_main.py::test_app_secret_key PASSED                           [100%]
 
+=================================== FAILURES ===================================
+______________________________ test_login_success ______________________________
+
+client = <FlaskClient <Flask 'tests.routes.test_admin_routes'>>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f8620e515b0>
+
+    def test_login_success(client, monkeypatch):
+        """Test successful admin login."""
+        monkeypatch.setattr("routes.admin_routes.ADMIN_USERNAME", "adm1n")
+        monkeypatch.setattr("routes.admin_routes.ADMIN_PASSWORD", "str0ngpassw0rd")
+    
+        with patch("werkzeug.security.check_password_hash", return_value=True):
+            response = client.post(
+                "/admin/login", data={"username": "adm1n", "password": "str0ngpassw0rd"}
+            )
+>           assert response.status_code == 302
+E           assert 200 == 302
+E            +  where 200 = <WrapperTestResponse streamed [200 OK]>.status_code
+
+tests/routes/test_admin_routes.py:48: AssertionError
 - generated xml file: /home/runner/work/Finance_Track_Web/Finance_Track_Web/pytest.xml -
 
----------- coverage: platform linux, python 3.12.9-final-0 -----------
-Name    Stmts   Miss  Cover   Missing
--------------------------------------
-TOTAL     776      0   100%
+---------- coverage: platform linux, python 3.13.2-final-0 -----------
+Name                                Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------
+routes/admin_routes.py                 66     10    85%   25-27, 49-51, 62-63, 94-95
+tests/routes/test_admin_routes.py     103      1    99%   49
+-----------------------------------------------------------------
+TOTAL                                 856     11    99%
 
-27 files skipped due to complete coverage.
+25 files skipped due to complete coverage.
 
-============================== 38 passed in 2.78s ==============================
+=========================== short test summary info ============================
+FAILED tests/routes/test_admin_routes.py::test_login_success - assert 200 == 302
+ +  where 200 = <WrapperTestResponse streamed [200 OK]>.status_code
+========================= 1 failed, 42 passed in 2.20s =========================
