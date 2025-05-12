@@ -35,6 +35,7 @@
   - (Done) Add support to skip currency conversion if API key does not exists in user_config.yaml
   - (Done) Legacy database import (Specific format in Excel)
   - (Done) Admin page for direct database modification
+    - With pre-filters based on database year + date range
 
 ## Version Control
 
