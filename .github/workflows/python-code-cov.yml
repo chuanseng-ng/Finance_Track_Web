@@ -65,6 +65,7 @@ jobs:
       if: ${{ github.ref == 'refs/heads/code/pre_release' }}
       run: |
         conda install coverage
+        coverage report -m --skip-covered
         coverage xml
 
     - name: Upload coverage report to Codacy
