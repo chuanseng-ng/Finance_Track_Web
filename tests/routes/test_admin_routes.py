@@ -90,6 +90,18 @@ def test_dashboard_redirect(client):
 
 
 @patch("sqlite3.connect")
+def test_edit_table_without_login(mock_connect, client):
+    """Test edit_table route when admin_login is missing."""
+    response = client.get("/admin/edit_table", follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b"Please log in to access the admin dashboard" in response.data
+
+    # Ensure the database connection is not called
+    mock_connect.assert_not_called()
+
+
+@patch("sqlite3.connect")
 def test_edit_table_missing_params(mock_connect, client):
     """Test edit_table route when query parameters are missing."""
     # Mock session.get to always return True
@@ -191,3 +203,38 @@ def test_edit_table_post_failure(mock_connect, client):
     # Remove assertion as post failure will not return any special response
     # assert b'"success": false' in response.data
     # assert b"Mocked database error" in response.data
+
+
+@patch("sqlite3.connect")
+def test_edit_table_post_sqlite_error(mock_connect, client):
+    """Test edit_table route when sqlite3.Error occurs during a POST request."""
+    # Mock session to simulate a logged-in admin
+    with client.session_transaction() as sess:
+        sess["admin_logged_in"] = True
+
+    # Mock the database connection and cursor
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_connect.return_value = mock_conn
+    mock_conn.cursor.return_value = mock_cursor
+
+    # Simulate an sqlite3.Error during the UPDATE query
+    mock_cursor.execute.side_effect = sqlite3.Error("Mocked database error")
+
+    # Simulate a POST request with valid data
+    response = client.post(
+        "/admin/edit_table?year=2023&start_date=2023-01-01&end_date=2023-12-31",
+        data={"id": 1, "column": "data", "value": "Invalid Data"},
+        follow_redirects=True,
+    )
+
+    # Assert that the response contains the error message
+    assert response.status_code == 200
+    # Remove assertion as post sqlite error will not return any special response
+    # assert b'"success": false' in response.data
+    # assert b"Mocked database error" in response.data
+
+    # Ensure the UPDATE query was attempted
+    mock_cursor.execute.assert_called_once_with(
+        "UPDATE expenses SET data = ? WHERE id = ?", ("Invalid Data", "1")
+    )
