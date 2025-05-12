@@ -71,10 +71,9 @@ jobs:
     - name: Upload coverage report to Codacy
       if: ${{ github.ref == 'refs/heads/code/pre_release' }}
       run: |
+        export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
         curl -s https://coverage.codacy.com/get.sh | bash
         bash <(curl -s https://coverage.codacy.com/get.sh) report -r coverage.xml
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
     - name: Update README with Coverage HTML
       if: ${{ github.ref == 'refs/heads/code/pre_release' }}
