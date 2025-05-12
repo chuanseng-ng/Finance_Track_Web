@@ -61,6 +61,13 @@ jobs:
         pytest-coverage-path: ./pytest-coverage.txt
         junitxml-path: ./pytest.xml
 
+    - name: Upload coverage report to Codacy
+      if: ${{ github.ref == 'refs/heads/code/pre_release' }}
+      uses: codacy/codacy-coverage-reporter-action@v1.3.0
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: ./pytest.xml
+
     - name: Update README with Coverage HTML
       if: ${{ github.ref == 'refs/heads/code/pre_release' }}
       run: |
