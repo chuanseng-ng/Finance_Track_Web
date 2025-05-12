@@ -92,7 +92,8 @@ def edit_table():
                 conn.commit()
                 return jsonify({"success": True})
             except sqlite3.Error as e:
-                return jsonify({"success": False, "error": str(e)})
+                app.logger.error(f"Database error: {str(e)}")
+                return jsonify({"success": False, "error": "An internal error occurred."})
 
         # Fetch data for the table based on the date range
         cursor.execute(
