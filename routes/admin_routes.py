@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 admin_bp = Blueprint("admin", __name__)
 
 # Load admin credentials from user_config.yaml
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../cfg/user_config_copy.yaml")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../cfg/user_config.yaml")
 
 try:
     with open(CONFIG_PATH, "r", encoding="utf-8") as config_file:
