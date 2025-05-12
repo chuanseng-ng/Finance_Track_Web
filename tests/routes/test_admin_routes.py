@@ -26,8 +26,9 @@ def client():
 @patch("builtins.open", side_effect=FileNotFoundError)
 def test_file_not_found(mock_open):
     """Test handling of FileNotFoundError when loading user_config.yaml."""
-    with patch("routes.admin_routes.ADMIN_USERNAME", "adm1n"), patch(
-        "routes.admin_routes.ADMIN_PASSWORD", "securepassw0rd"
+    with (
+        patch("routes.admin_routes.ADMIN_USERNAME", "adm1n"),
+        patch("routes.admin_routes.ADMIN_PASSWORD", "securepassw0rd"),
     ):
         from routes.admin_routes import ADMIN_USERNAME, ADMIN_PASSWORD_HASH
 
