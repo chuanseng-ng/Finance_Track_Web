@@ -43,13 +43,13 @@ Note:  Only keep latest 5 version histories
 
 | Version | Description | Changes |
 | :-----: | :---------: | :-----: |
+| V3.2 | Admin table modification | Allow admin to modify database as needed |
 | V3.1 | Admin page addition | Add admin login page for database modification |
 | V3.0 | Legacy excel database import support | Add support for legacy database import merge with current |
 | V2.1 | Custom time period expenses graph plot | Add support for custom time period expense plot |
 | V2.0 | Monthly/yearly expenses graph plot | Add support for current month/year expense plot |
 | V1.0 | Update README for version_control | Add version_control info into README |
 | V0.9 | month_salary calculation update | Add extra-cases in month_salary calculation to cover corner cases |
-| V0.8 | Add salary support | Add salary_input support in web app + Add current month's balance calculation |
 
 ## References
 
