@@ -13,11 +13,21 @@ from db_import.db_import import (
 
 def test_month_name_to_int():
     """Test the month_name_to_int function."""
-    assert month_name_to_int("Jan") == 1
-    assert month_name_to_int("Feb") == 2
-    assert month_name_to_int("Dec") == 12
-    assert month_name_to_int("Invalid") is None  # Invalid month name
-    assert month_name_to_int("") is None  # Empty string
+    if month_name_to_int("Jan") != 1:
+        error_msg = "January should be converted to 1"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if month_name_to_int("Feb") != 2:
+        error_msg = "February should be converted to 2"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if month_name_to_int("Dec") != 12:
+        error_msg = "December should be converted to 12"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if month_name_to_int("Invalid") is not None:  # Invalid month name
+        error_msg = "Invalid month name should return None"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if month_name_to_int("") is not None:  # Empty string
+        error_msg = "Empty string should return None"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 def test_merge_start_date():
@@ -26,19 +36,25 @@ def test_merge_start_date():
         "Start Month": "Jan",
         "Start Year": "2023",
     }
-    assert merge_start_date(mock_row) == "2023-01-01"
+    if merge_start_date(mock_row) != "2023-01-01":
+        error_msg = "January should be converted to 2023-01-01"  # pragma: no cover
+        raise AssertionError(error_msg)
 
     mock_row = {
         "Start Month": "-",
         "Start Year": "2023",
     }
-    assert merge_start_date(mock_row) == "2023-01-01"  # Default to January 1, 2023
+    if merge_start_date(mock_row) != "2023-01-01":  # Default to January 1, 2023
+        error_msg = "Missing month should default to 2023-01-01"  # pragma: no cover
+        raise AssertionError(error_msg)
 
     mock_row = {
         "Start Month": "Invalid",
         "Start Year": "2023",
     }
-    assert merge_start_date(mock_row) is None  # Invalid month name
+    if merge_start_date(mock_row) is not None:  # Invalid month name
+        error_msg = "Invalid month name should return None"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 def test_merge_end_date():
@@ -47,19 +63,25 @@ def test_merge_end_date():
         "End Month": "Dec",
         "End Year": "2023",
     }
-    assert merge_end_date(mock_row) == "2023-12-01"
+    if merge_end_date(mock_row) != "2023-12-01":
+        error_msg = "December should be converted to 2023-12-01"  # pragma: no cover
+        raise AssertionError(error_msg)
 
     mock_row = {
         "End Month": "-",
         "End Year": "2023",
     }
-    assert merge_end_date(mock_row) is None  # Default to None if month is missing
+    if merge_end_date(mock_row) is not None:  # Default to None if month is missing
+        error_msg = "Missing month should return None"  # pragma: no cover
+        raise AssertionError(error_msg)
 
     mock_row = {
         "End Month": "Invalid",
         "End Year": "2023",
     }
-    assert merge_end_date(mock_row) is None  # Invalid month name
+    if merge_end_date(mock_row) is not None:  # Invalid month name
+        error_msg = "Invalid month name should return None"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 @pytest.fixture

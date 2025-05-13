@@ -42,12 +42,20 @@ def test_index_success(mock_get_db, client):
     response = client.get("/")
 
     # Assertions
-    assert response.status_code == 200
-    assert (
-        b"Personal Web-based Expense Tracker" in response.data
-    )  # Ensure the template is rendered
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if (
+        b"Personal Web-based Expense Tracker" not in response.data
+    ):  # Ensure the template is rendered
+        error_msg = f"Template not found in response data, got {response.data}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
-    assert mock_cursor.execute.call_count == 3  # Ensure all queries were executed
+    if mock_cursor.execute.call_count != 3:  # Ensure all queries were executed
+        error_msg = f"Expected 3 queries, got {mock_cursor.execute.call_count}"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 @patch("routes.index_routes.get_db")
@@ -61,8 +69,14 @@ def test_index_error(mock_get_db, client):
     response = client.get("/")
 
     # Assertions
-    assert response.status_code == 500
-    assert response.json == {"error": "An internal error has occurred!"}
+    if response.status_code != 500:
+        error_msg = (
+            f"Expected status code 500, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"error": "An internal error has occurred!"}:
+        error_msg = f"Expected error message, got {response.json}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
 
 
@@ -70,8 +84,16 @@ def test_index_error(mock_get_db, client):
 def test_upload_excel_get(client):
     """Test the GET request to the /upload_excel route."""
     response = client.get("/upload_excel")
-    assert response.status_code == 200
-    assert b"Upload Excel File" in response.data  # Ensure the page renders correctly
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if b"Upload Excel File" not in response.data:  # Ensure the page renders correctly
+        error_msg = (
+            f"Upload page content not found, got {response.data}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
 
 
 @patch("routes.index_routes.update_database_from_excel")
@@ -89,7 +111,11 @@ def test_upload_excel_post_success(mock_update_database, client):
     )
 
     # Assertions
-    assert response.status_code == 200
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     mock_update_database.assert_called_once_with("mock_file.xlsx", 2023)
 
 
@@ -105,7 +131,11 @@ def test_upload_excel_post_missing_data(mock_update_database, client):
     )
 
     # Assertions
-    assert response.status_code == 200  # Redirect back to /upload_excel
+    if response.status_code != 200:  # Redirect back to /upload_excel
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     mock_update_database.assert_not_called()
 
 
@@ -124,6 +154,12 @@ def test_upload_excel_post_exception(mock_update_database, client):
     )
 
     # Assertions
-    assert response.status_code == 500
-    assert b"An internal error has occurred!" in response.data
+    if response.status_code != 500:
+        error_msg = (
+            f"Expected status code 500, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if b"An internal error has occurred!" not in response.data:
+        error_msg = f"Unexpected error message, got {response.data}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_update_database.assert_called_once_with("mock_file.xlsx", 2023)
