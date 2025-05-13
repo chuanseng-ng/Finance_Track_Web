@@ -5,7 +5,7 @@
 [![Python Linting](https://github.com/chuanseng-ng/Finance_Track_Web/actions/workflows/pylint.yml/badge.svg?branch=main&event=push)](https://github.com/chuanseng-ng/Finance_Track_Web/actions/workflows/pylint.yml/badge.svg)
 [![CodeQL](https://github.com/chuanseng-ng/Finance_Track_Web/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/chuanseng-ng/Finance_Track_Web/actions/workflows/github-code-scanning/codeql)
 [![Codacy Code Quality](https://app.codacy.com/project/badge/Grade/4ae04aa0ae404916b1c52a7d53557f07)](https://app.codacy.com/gh/chuanseng-ng/Finance_Track_Web/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/4ae04aa0ae404916b1c52a7d53557f07)](https://app.codacy.com/gh/chuanseng-ng/Finance_Track_Web/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) 
+[![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/4ae04aa0ae404916b1c52a7d53557f07)](https://app.codacy.com/gh/chuanseng-ng/Finance_Track_Web/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 
 ## Code Coverage
 <!-- markdownlint-disable MD033 -->
