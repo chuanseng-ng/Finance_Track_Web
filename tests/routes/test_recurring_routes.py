@@ -46,8 +46,16 @@ def test_add_recurring_success(mock_convert_to_sgd, mock_get_db, client):
     response = client.post("/add_recurring", json=recurring_data)
 
     # Assertions
-    assert response.status_code == 200
-    assert response.json == {"message": "Recurring expense added successfully"}
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"message": "Recurring expense added successfully"}:
+        error_msg = (
+            f"Unexpected response message, got {response.json}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once_with(2025)
     # Skip convert_to_sgd call due to API key
     # mock_convert_to_sgd.assert_called_once_with(
@@ -80,8 +88,14 @@ def test_add_recurring_error(mock_get_db, client):
     response = client.post("/add_recurring", json=recurring_data)
 
     # Assertions
-    assert response.status_code == 500
-    assert response.json == {"error": "An internal error has occurred!"}
+    if response.status_code != 500:
+        error_msg = (
+            f"Expected status code 500, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"error": "An internal error has occurred!"}:
+        error_msg = f"Expected error message, got {response.json}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
 
 
@@ -113,8 +127,16 @@ def test_add_recurring_missing_end_date(mock_convert_to_sgd, mock_get_db, client
     response = client.post("/add_recurring", json=recurring_data)
 
     # Assertions
-    assert response.status_code == 200
-    assert response.json == {"message": "Recurring expense added successfully"}
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"message": "Recurring expense added successfully"}:
+        error_msg = (
+            f"Unexpected response message, got {response.json}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once_with(2025)
     # Skip convert_to_sgd call due to API key
     # mock_convert_to_sgd.assert_called_once_with(

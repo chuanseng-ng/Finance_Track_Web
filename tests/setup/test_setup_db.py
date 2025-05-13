@@ -59,4 +59,6 @@ def test_get_db_creates_tables(mock_connect):
     mock_conn.commit.assert_called_once()
 
     # Verify the function returns the connection object
-    assert conn == mock_conn
+    if conn != mock_conn:
+        error_msg = "get_db should return the connection object."  # pragma: no cover
+        raise AssertionError(error_msg)

@@ -12,8 +12,12 @@ def test_cfg_setup_with_valid_api_key(mock_safe_load):
     """Test cfg_setup with a valid API key."""
     mock_safe_load.return_value = {"error_bypass": False, "api_key": "valid_api_key"}
     api_key, error_bypass = cfg_setup()
-    assert api_key == "valid_api_key"
-    assert error_bypass is False
+    if api_key != "valid_api_key":
+        error_msg = "API Key should be 'valid_api_key'!"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if error_bypass is True:
+        error_msg = "API Key should not be empty!"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 @patch("setup.setup_stg.yaml.safe_load")
@@ -21,8 +25,12 @@ def test_cfg_setup_with_missing_api_key_and_error_bypass(mock_safe_load):
     """Test cfg_setup with a missing API key and error_bypass enabled."""
     mock_safe_load.return_value = {"error_bypass": True, "api_key": ""}
     api_key, error_bypass = cfg_setup()
-    assert api_key is None
-    assert error_bypass is True
+    if api_key is not None:
+        error_msg = "API Key should be None!"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if error_bypass is False:
+        error_msg = "Error bypass should be True!"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 @patch("setup.setup_stg.yaml.safe_load")

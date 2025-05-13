@@ -47,8 +47,16 @@ def test_add_salary_success(mock_convert_to_sgd, mock_get_db, client):
     response = client.post("/add_salary", json=salary_data)
 
     # Assertions
-    assert response.status_code == 200
-    assert response.json == {"message": "Salary added successfully"}
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"message": "Salary added successfully"}:
+        error_msg = (
+            f"Unexpected response message, got {response.json}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once_with(2025)
     # Skip convert_to_sgd call due to API key
     # mock_convert_to_sgd.assert_called_once_with(
@@ -89,16 +97,24 @@ def test_add_salary_with_previous_entry(mock_convert_to_sgd, mock_get_db, client
     response = client.post("/add_salary", json=salary_data)
 
     # Assertions
-    assert response.status_code == 200
-    assert response.json == {"message": "Salary added successfully"}
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"message": "Salary added successfully"}:
+        error_msg = (
+            f"Unexpected response message, got {response.json}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once_with(2025)
     # Skip convert_to_sgd call due to API key
     # mock_convert_to_sgd.assert_called_once_with(
     #     "https://v6.exchangerate-api.com/v6/<api_key>/latest/", 5000.0, "USD"
     # )
-    assert (
-        mock_cursor.execute.call_count == 3
-    )  # Update previous entry and insert new one
+    if mock_cursor.execute.call_count != 3:  # Update previous entry and insert new one
+        error_msg = f"Expected 3 calls to execute, got {mock_cursor.execute.call_count}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_conn.commit.assert_called_once()
     mock_conn.close.assert_called_once()
 
@@ -121,6 +137,12 @@ def test_add_salary_error(mock_get_db, client):
     response = client.post("/add_salary", json=salary_data)
 
     # Assertions
-    assert response.status_code == 500
-    assert response.json == {"error": "An internal error has occurred!"}
+    if response.status_code != 500:
+        error_msg = (
+            f"Expected status code 500, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"error": "An internal error has occurred!"}:
+        error_msg = f"Expected error message, got {response.json}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
