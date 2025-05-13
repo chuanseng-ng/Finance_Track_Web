@@ -7,6 +7,7 @@ from flask import Flask
 from routes.plot_routes import plot_bp
 
 
+# pylint: disable=redefined-outer-name
 @pytest.fixture
 def client():
     """Fixture to create a Flask test client."""
@@ -18,7 +19,6 @@ def client():
         return "Home"  # pragma: no cover
 
     app.add_url_rule("/", endpoint="index.index", view_func=index)
-    # pylint: disable=redefined-outer-name
     with app.test_client() as client:
         yield client
 
