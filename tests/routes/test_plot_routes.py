@@ -47,19 +47,35 @@ def test_plot_expenditure_success(mock_figure, mock_get_db, client):
 
     print(response.data)
     # Assertions
-    assert response.status_code == 200
-    assert (
-        b"<div>Mock Monthly Plot</div>" in response.data
-    )  # Ensure the plot HTML is rendered
-    assert (
-        b"<div>Mock Yearly Plot</div>" in response.data
-    )  # Ensure the plot HTML is rendered
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if (
+        b"<div>Mock Monthly Plot</div>" not in response.data
+    ):  # Ensure the plot HTML is rendered
+        error_msg = "Monthly plot HTML not found in response data"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if (
+        b"<div>Mock Yearly Plot</div>" not in response.data
+    ):  # Ensure the plot HTML is rendered
+        error_msg = "Yearly plot HTML not found in response data"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
-    assert mock_cursor.execute.call_count == 2  # Ensure both queries were executed
+    if mock_cursor.execute.call_count != 2:  # Ensure both queries were executed
+        error_msg = f"Expected 2 queries, got {mock_cursor.execute.call_count}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_figure.assert_called()  # Ensure Plotly figure was created
-    assert mock_fig_instance.add_trace.call_count == 2  # Ensure traces were added
-    assert mock_fig_instance.update_layout.call_count == 2  # Ensure layout was updated
-    assert mock_fig_instance.to_html.call_count == 2  # Ensure HTML was generated
+    if mock_fig_instance.add_trace.call_count != 2:  # Ensure traces were added
+        error_msg = f"Expected 2 traces, got {mock_fig_instance.add_trace.call_count}"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if mock_fig_instance.update_layout.call_count != 2:  # Ensure layout was updated
+        error_msg = f"Expected 2 layout updates, got {mock_fig_instance.update_layout.call_count}"  # pragma: no cover
+        raise AssertionError(error_msg)
+    if mock_fig_instance.to_html.call_count != 2:  # Ensure HTML was generated
+        error_msg = f"Expected 2 HTML generations, got {mock_fig_instance.to_html.call_count}"  # pragma: no cover
+        raise AssertionError(error_msg)
 
 
 @patch("routes.plot_routes.get_db")
@@ -90,10 +106,16 @@ def test_plot_custom_expenditure_success(mock_figure, mock_get_db, client):
     )
 
     # Assertions
-    assert response.status_code == 200
-    assert (
-        b"<div>Mock Custom Plot</div>" in response.data
-    )  # Ensure the plot HTML is rendered
+    if response.status_code != 200:
+        error_msg = (
+            f"Expected status code 200, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if (
+        b"<div>Mock Custom Plot</div>" not in response.data
+    ):  # Ensure the plot HTML is rendered
+        error_msg = "Custom plot HTML not found in response data"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
     mock_cursor.execute.assert_called_once()  # Ensure the query was executed
     mock_figure.assert_called()  # Ensure Plotly figure was created
@@ -113,8 +135,14 @@ def test_plot_expenditure_error(mock_get_db, client):
     response = client.get("/plot_expenditure")
 
     # Assertions
-    assert response.status_code == 500
-    assert response.json == {"error": "An internal error has occurred!"}
+    if response.status_code != 500:
+        error_msg = (
+            f"Expected status code 500, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"error": "An internal error has occurred!"}:
+        error_msg = f"Expected error message, got {response.json}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
 
 
@@ -126,8 +154,14 @@ def test_plot_custom_expenditure_missing_params(mock_get_db, client):
     response = client.get("/plot_custom_expenditure")
 
     # Assertions
-    assert response.status_code == 400
-    assert response.json == {"error": "Start date and end date are required"}
+    if response.status_code != 400:
+        error_msg = (
+            f"Expected status code 400, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"error": "Start date and end date are required"}:
+        error_msg = f"Expected error message, got {response.json}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_not_called()
 
 
@@ -144,6 +178,12 @@ def test_plot_custom_expenditure_error(mock_get_db, client):
     )
 
     # Assertions
-    assert response.status_code == 500
-    assert response.json == {"error": "An internal error has occurred!"}
+    if response.status_code != 500:
+        error_msg = (
+            f"Expected status code 500, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
+    if response.json != {"error": "An internal error has occurred!"}:
+        error_msg = f"Expected error message, got {response.json}"  # pragma: no cover
+        raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
