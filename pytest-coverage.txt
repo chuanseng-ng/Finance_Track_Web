@@ -58,8 +58,8 @@ tests/test_main.py::test_app_secret_key PASSED                           [100%]
 ---------- coverage: platform linux, python 3.13.2-final-0 -----------
 Name    Stmts   Miss  Cover   Missing
 -------------------------------------
-TOTAL     892      0   100%
+TOTAL     896      0   100%
 
 27 files skipped due to complete coverage.
 
-============================== 46 passed in 1.84s ==============================
+============================== 46 passed in 2.06s ==============================
