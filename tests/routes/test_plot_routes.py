@@ -7,12 +7,18 @@ from flask import Flask
 from routes.plot_routes import plot_bp
 
 
+# pylint: disable=redefined-outer-name
 @pytest.fixture
 def client():
     """Fixture to create a Flask test client."""
     app = Flask(__name__, template_folder="../../templates")
     app.register_blueprint(plot_bp)
-    # pylint: disable=redefined-outer-name
+
+    @app.route("/")
+    def index():
+        return "Home"  # pragma: no cover
+
+    app.add_url_rule("/", endpoint="index.index", view_func=index)
     with app.test_client() as client:
         yield client
 
@@ -80,7 +86,6 @@ def test_plot_expenditure_success(mock_figure, mock_get_db, client):
 
 @patch("routes.plot_routes.get_db")
 @patch("routes.plot_routes.go.Figure")
-# pylint: disable=redefined-outer-name
 def test_plot_custom_expenditure_success(mock_figure, mock_get_db, client):
     """Test the plot_custom_expenditure route with Plotly."""
     # Mock database connection and cursor
@@ -94,6 +99,7 @@ def test_plot_custom_expenditure_success(mock_figure, mock_get_db, client):
         ("2023-11-01", 150.0),
         ("2023-11-02", 250.0),
     ]
+    mock_cursor.description = [("date",), ("amount",)]
 
     # Mock Plotly figure methods
     mock_fig_instance = MagicMock()

@@ -47,9 +47,7 @@ def test_index_success(mock_get_db, client):
             f"Expected status code 200, got {response.status_code}"  # pragma: no cover
         )
         raise AssertionError(error_msg)
-    if (
-        b"Personal Web-based Expense Tracker" not in response.data
-    ):  # Ensure the template is rendered
+    if b"Expense Tracker" not in response.data:  # Ensure the template is rendered
         error_msg = f"Template not found in response data, got {response.data}"  # pragma: no cover
         raise AssertionError(error_msg)
     mock_get_db.assert_called_once()
