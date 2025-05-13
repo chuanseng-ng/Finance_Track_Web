@@ -4,60 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <header>
-        <nav>
-            <a href="{{ url_for('admin.login') }}">Admin</a> <!-- Admin Button -->
-        </nav>
-    </header>
-    <h1>Personal Web-based Expense Tracker</h1>
-    <h2>Current Month's Spending: SGD {{ monthly_spending }}</h2>
-    <h2>Current Month's Balance: SGD {{monthly_balance}}</h2>
-    
-    <h3>Add an Expense</h3>
-    <form id="expense-form">
-        Date: <input type="date" id="date" required><br>
-        Category: <input type="text" id="category" required><br>
-        Item: <input type="text" id="item" required><br>
-        Location: <input type="text" id="location" required><br>
-        Cost: <input type="number" id="price" step="0.01" required><br>
-        Currency: <input type="text" id="currency" value="SGD" required><br>
-        <button type="submit">Add Expense</button>
-    </form>
-
-    <h3>Add a Recurring Expense</h3>
-    <form id="recurring-form">
-        Start Date: <input type="date" id="start_date" required><br>
-        End Date: <input type="date" id="end_date"><br>
-        Category: <input type="text" id="recurring_category" required><br>
-        Item: <input type="text" id="recurring_item" required><br>
-        Location: <input type="text" id="recurring_location" required><br>
-        Cost: <input type="number" id="recurring_price" step="0.01" required><br>
-        Currency: <input type="text" id="recurring_currency" value="SGD" required><br>
-        <button type="submit">Add Recurring Expense</button>
-    </form>
-
-    <h3>Add Salary</h3>
-    <form id="salary-form">
-        New Salary Start Date: <input type="date" id="salary_start_date" required><br>
-        Amount: <input type="number" id="salary_amount"  step="0.01"required><br>
-        Currency: <input type="text" id="salary_currency" value="SGD" required><br>
-        <button type="submit">Add Salary</button>
-    </form>
-
-    <h3>View Expenditure Plots</h3>
-    <a href="/plot_expenditure">View Current Month's and Year's Expenditure Plots</a>
-
-    <h3>View Expenditure for Custom Date Range</h3>
-    <form id="custom-range-form">
-        Start Date: <input type="date" id="custom_start_date" required><br>
-        End Date: <input type="date" id="custom_end_date" required><br>
-        <button type="submit">View Custom Range Expenditure</button>
-    </form>
-
-    <button onclick="window.location.href='/upload_excel'">Upload Excel File</button>
-
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Expense Tracker</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin.login') }}">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <h2 class="card-title">Current Month's Spending</h2>
+                        <p class="display-6 text-danger">SGD {{ monthly_spending }}</p>
+                        <h2 class="card-title">Current Month's Balance</h2>
+                        <p class="display-6 text-success">SGD {{ monthly_balance }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">Add an Expense</h4>
+                        <form id="expense-form">
+                            <div class="mb-2">
+                                <label class="form-label">Date:</label>
+                                <input type="date" id="date" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Category:</label>
+                                <input type="text" id="category" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Item:</label>
+                                <input type="text" id="item" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Location:</label>
+                                <input type="text" id="location" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Cost:</label>
+                                <input type="number" id="price" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Currency:</label>
+                                <input type="text" id="currency" class="form-control" value="SGD" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Add Expense</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">Add a Recurring Expense</h4>
+                        <form id="recurring-form">
+                            <div class="mb-2">
+                                <label class="form-label">Start Date:</label>
+                                <input type="date" id="start_date" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">End Date:</label>
+                                <input type="date" id="end_date" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Category:</label>
+                                <input type="text" id="recurring_category" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Item:</label>
+                                <input type="text" id="recurring_item" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Location:</label>
+                                <input type="text" id="recurring_location" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Cost:</label>
+                                <input type="number" id="recurring_price" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Currency:</label>
+                                <input type="text" id="recurring_currency" class="form-control" value="SGD" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Add Recurring Expense</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">Add Salary</h4>
+                        <form id="salary-form">
+                            <div class="mb-2">
+                                <label class="form-label">New Salary Start Date:</label>
+                                <input type="date" id="salary_start_date" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Amount:</label>
+                                <input type="number" id="salary_amount" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Currency:</label>
+                                <input type="text" id="salary_currency" class="form-control" value="SGD" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Add Salary</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">View Expenditure Plots</h4>
+                        <a href="/plot_expenditure" class="btn btn-outline-secondary w-100 mb-2">Current Month's and Year's Expenditure Plots</a>
+                        <h5 class="mt-4">View Expenditure for Custom Date Range</h5>
+                        <form id="custom-range-form" class="mb-2">
+                            <div class="mb-2">
+                                <label class="form-label">Start Date:</label>
+                                <input type="date" id="custom_start_date" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">End Date:</label>
+                                <input type="date" id="custom_end_date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary w-100">View Custom Range Expenditure</button>
+                        </form>
+                        <button onclick="window.location.href='/upload_excel'" class="btn btn-outline-success w-100">Upload Excel File</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('expense-form').addEventListener('submit', function(e) {
             e.preventDefault();
