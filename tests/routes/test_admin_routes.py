@@ -348,7 +348,11 @@ def test_edit_table_post_invalid_column(mock_connect, client):
     )
 
     # Assert that the response contains the error message
-    assert response.status_code == 400
+    if response.status_code != 400:
+        error_msg = (
+            f"Expected status code 400, got {response.status_code}"  # pragma: no cover
+        )
+        raise AssertionError(error_msg)
     # Remove assertion as incorrect column name will not return any special response
     # assert b"Invalid column name." in response.data
 
