@@ -52,6 +52,31 @@ Note:  Only keep latest 5 version histories
 | V3.0 | Legacy excel database import support | Add support for legacy database import merge with current |
 | V2.1 | Custom time period expenses graph plot | Add support for custom time period expense plot |
 
+## Docker Setup/Execution
+
+1. Build Docker image
+
+    - Pull latest Github repository
+    - Build Docker image
+      - From local Dockerfile
+      - From remote repository
+
+```sh
+docker build -t finance-track-web 
+```
+
+```sh
+docker build -t finance-track-web https://github.com/chuanseng-ng/Finance_Track_Web.git
+```
+
+2. Run Docker container <!-- markdownlint-disable MD029 -->
+
+```sh
+docker run -p 5000:5000 finance-track-web
+```
+
+App will be available at [http://localhost:5000](http://localhost:5000)
+
 ## References
 
 - NIL
