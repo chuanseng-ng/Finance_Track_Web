@@ -46,7 +46,7 @@ Note:  Only keep latest 5 version histories
 
 | Version | Description | Changes |
 | :-----: | :---------: | :-----: |
-| V3.3 | Improved web-app UI | Overhaul web-app UI using bootstrap CSS |
+| V4.0 | Improved web-app UI | Overhaul web-app UI using bootstrap CSS |
 | V3.2 | Admin table modification | Allow admin to modify database as needed |
 | V3.1 | Admin page addition | Add admin login page for database modification |
 | V3.0 | Legacy excel database import support | Add support for legacy database import merge with current |
