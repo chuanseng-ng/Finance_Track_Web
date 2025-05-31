@@ -32,6 +32,7 @@
   - Plot monthly/yearly expense graph (Using plotly)
   - Plot expense graph for custom time period (Using plotly)
   - Web app UI overhaul
+  - Docker containerization support
 - To-Do
   - NA
 - Quality of Life (QoL) items
